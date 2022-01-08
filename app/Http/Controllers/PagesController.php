@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App, Hash;
+use App\Http\Requests\StorePostRequest;
 
 class PagesController extends Controller
 {
@@ -16,13 +17,13 @@ class PagesController extends Controller
         return view('registro');
     }
 
-    public function registrar(Request $request){
-        
+    public function registrar(StorePostRequest $request){
+
         $personaNueva = new App\Persona;
         $personaNueva->rut = $request->rut;
         $personaNueva->nombre= $request->nombre;
         $personaNueva->apellido= $request->apellido;
-        $personaNueva->correo= $request->email;
+        $personaNueva->correo= $request->correo;
         $personaNueva->contrasena= Hash::make($request->contrasena);
         $personaNueva->save();
         return view('registro');

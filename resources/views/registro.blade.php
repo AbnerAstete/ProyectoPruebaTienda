@@ -18,8 +18,7 @@
 								<a href="#" class="active" id="login-form-link">Login</a>
 							</div>
 							<div class="col-xs-6">
-								<a href="#" id="register-form-link">Registro</a>
-                                
+								<a href="#" id="register-form-link">Registro</a>                                
 							</div>
 						</div>
 						<hr>
@@ -58,20 +57,31 @@
 								</form>
 								<form id="register-form" action="{{URL('/registrar')}}"  method="post" role="form" style="display: none;" >
 									{{csrf_field()}}
+
+
+									@if (count($errors)> 0)
+										@foreach ($errors->all() as $error)
+											<p class="alert alert-danger">
+												{{$error}}
+											</p> 																			
+										@endforeach
+									@endif
+
+
 									<div class="form-group">
-										<input type="text" name="rut" id="rut" tabindex="1" class="form-control" placeholder="Rut" value="">
+										<input type="text" name="rut" id="rut" tabindex="1" class="form-control" placeholder=" Ingrese Rut con guion" value="">
 									</div>
 									<div class="form-group">
-										<input type="text" name="nombre" id="nombre" tabindex="1" class="form-control" placeholder="Nombre" value="">
+										<input type="text" name="nombre" id="nombre" tabindex="1" class="form-control" placeholder="Ingrese Nombre" value="">
 									</div>
 									<div class="form-group">
-										<input type="text" name="apellido" id="apellido" tabindex="1" class="form-control" placeholder="Apellido" value="">
+										<input type="text" name="apellido" id="apellido" tabindex="1" class="form-control" placeholder="Ingrese Apellido" value="">
 									</div>
 									<div class="form-group">
-										<input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email " value="">
+										<input type="email" name="correo" id="correo" tabindex="1" class="form-control" placeholder="Email: example@email.com " value="">
 									</div>
 									<div class="form-group">
-										<input type="password" name="contrasena" id="contrasena" tabindex="2" class="form-control" placeholder="Contraseña">
+										<input type="password" name="contrasena" id="contrasena" tabindex="2" class="form-control" placeholder="Ingrese Contraseña">
 									</div>
 									<div class="form-group">
 										<div class="row">
