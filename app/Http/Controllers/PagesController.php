@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App, Hash;
 use App\Http\Requests\StorePostRequest;
 use App\Persona;
-
+use Auth;
+use Log;
+use Session;
 class PagesController extends Controller
 {
     //
@@ -16,6 +18,11 @@ class PagesController extends Controller
 
     public function login(){
         return view('registro');
+    }
+
+    public function salir(){
+        Auth::logout();
+        return view('home');
     }
 
     public function registrar(StorePostRequest $request){
@@ -31,27 +38,24 @@ class PagesController extends Controller
 
     }
     
-    public function ingresar(Request $request){
-        
-        // $request->validate([
-        //     'rut' => 'required',
-        //     'contrasena' => 'required'
-        // ]);
 
-        // $userInfo = Persona::where('rut',"=",$request->rut)->first();
-        // if(!$userInfo){
-        //     return back()->with('error','No se encontro el rut ingresado');
-        // }
-        // else{
-        //     if(Hash::check($request->contrasena,$userInfo->contrasena)){
-        //         $request->session()->put('Ingresado',$userInfo->id);
-        //         return redirect('/');
-        //     }
-        //     else{
-        //         return back()->with('error','Contraseña incorrecta');
-        //     }
-        // }
-        return view('home');
-    }
+    public function ingresar(Request $request){
+
+        $request->validate([
+            'rut' => 'required',
+            'contrasena' => 'required'
+        ]);
+
+        $user = Persona::where('rut',"=",$request->rut)->first();
+        Auth::login($user, true);
+        log::info(Auth::login($user));
+        
+        return view('home',compact('user'));
+
+        
+    }   
+
+        
+    
 
 }
