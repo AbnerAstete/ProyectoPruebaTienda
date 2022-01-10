@@ -13,6 +13,8 @@
 
 Route::get('/', 'PagesController@home');
 
+Route::post('/ingresar','PagesController@ingresar');
+
 Route::get('/registrar','PagesController@login');
 
 Route::post('/registrar', 'PagesController@registrar');

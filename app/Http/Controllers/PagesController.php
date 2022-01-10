@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App, Hash;
 use App\Http\Requests\StorePostRequest;
+use App\Persona;
 
 class PagesController extends Controller
 {
@@ -28,6 +29,29 @@ class PagesController extends Controller
         $personaNueva->save();
         return view('registro');
 
+    }
+    
+    public function ingresar(Request $request){
+        
+        // $request->validate([
+        //     'rut' => 'required',
+        //     'contrasena' => 'required'
+        // ]);
+
+        // $userInfo = Persona::where('rut',"=",$request->rut)->first();
+        // if(!$userInfo){
+        //     return back()->with('error','No se encontro el rut ingresado');
+        // }
+        // else{
+        //     if(Hash::check($request->contrasena,$userInfo->contrasena)){
+        //         $request->session()->put('Ingresado',$userInfo->id);
+        //         return redirect('/');
+        //     }
+        //     else{
+        //         return back()->with('error','Contraseña incorrecta');
+        //     }
+        // }
+        return view('home');
     }
 
 }

@@ -5,5 +5,7 @@
 </head>
 <body>
     <a href="{{URL('/registrar')}}"><input type="button" value="Ir"></a>
+
+
 </body>
 </html>

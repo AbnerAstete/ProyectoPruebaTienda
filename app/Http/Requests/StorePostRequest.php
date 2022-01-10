@@ -25,10 +25,10 @@ class StorePostRequest extends FormRequest
     {
         return [
             //
-            'rut'=> 'required|max:10',
+            'rut' => 'required|unique:personas,rut',
             'nombre'=> 'required',
             'apellido' => 'required',
-            'correo'=> 'required',
+            'correo'=> 'required|unique:personas,correo',
             'contrasena'=> 'required'
         ];
     }
@@ -37,6 +37,8 @@ class StorePostRequest extends FormRequest
     {
         return[
 
+            'correo.unique' => 'El correo ya esta en uso',
+            'rut.unique' => ' El rut ya esta en uso ',
             'rut.required' => ' El rut es requerido ',
             'nombre.required' => ' El nombre es requerido ',
             'apellido.required' => ' El apellido es requerido ',

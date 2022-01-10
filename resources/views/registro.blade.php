@@ -26,10 +26,30 @@
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-lg-12">
-								<form id="login-form"  method="post" role="form" style="display: block;">
+								<form id="login-form" action="{{URL('/ingresar')}}" method="post" role="form" autocomplete="off" style="display: block;">
+									{{csrf_field()}}
+
+									{{-- @foreach ($errors->get('rut') as $error)
+                						<div class="alert alert-danger">
+                 							 El rut es requerido
+                						</div>
+									@endforeach
+
+									@foreach ($errors->get('contrasena') as $error)
+                						<div class="alert alert-danger">
+                 							 La contraseña es requerida
+                						</div>
+									@endforeach
+
+									@if (session('error'))
+									<div class="alert alert-danger">
+										{{session('error')}}
+									</div>	
+									@endif	 --}}
+
 									
 									<div class="form-group">
-										<input type="text" name="nombre" id="nombre" tabindex="1" class="form-control" placeholder="Nombre" value="">
+										<input type="text" name="rut" id="rut" tabindex="1" class="form-control" placeholder="Ingrese Rut con guion" value="">
 									</div>
 									<div class="form-group">
 										<input type="password" name="contrasena" id="contrasena" tabindex="2" class="form-control" placeholder="Contraseña">
@@ -55,7 +75,7 @@
 										</div>
 									</div>
 								</form>
-								<form id="register-form" action="{{URL('/registrar')}}"  method="post" role="form" style="display: none;" >
+								<form id="register-form" action="{{URL('/registrar')}}"  method="post" role="form" style="display: none;" autocomplete="off">
 									{{csrf_field()}}
 
 
