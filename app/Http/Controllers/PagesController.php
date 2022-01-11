@@ -20,7 +20,7 @@ class PagesController extends Controller
         return view('registro');
     }
 
-    public function salir(){
+    public function logout(){
         Auth::logout();
         return view('home');
     }
