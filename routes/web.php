@@ -25,6 +25,12 @@ Route::post('/registrar', 'PagesController@registrar');
 
 
 // Usuario Ingresado
+// Route::group(['prefix' => 'ingresado','middleware'=>'ingresado'],function(){
 
-Route::get('/logout', 'PagesController@logout');
+//     Route::get('/noaccess','PagesController@noaccess');
+    
+//     Route::get('/logout', 'PagesController@logout');
 
+// });
+Route::get('ingresado/noaccess','PagesController@noaccess')->middleware('ingresado');
+Route::get('ingresado/logout', 'PagesController@logout')->middleware('ingresado');

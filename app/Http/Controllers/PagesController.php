@@ -21,8 +21,14 @@ class PagesController extends Controller
     }
 
     public function logout(){
+        log::info('logout');
         Auth::logout();
-        return view('home');
+        return 'hola';
+        //return view('home');
+    }
+
+    public function noaccess(){
+        return view('noaccess');
     }
 
     public function registrar(StorePostRequest $request){
@@ -50,9 +56,7 @@ class PagesController extends Controller
         Auth::login($user, true);
         log::info(Auth::login($user));
         
-        return view('home',compact('user'));
-
-        
+        return view('home',compact('user'));     
     }   
 
         

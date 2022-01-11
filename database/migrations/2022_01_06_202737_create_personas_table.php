@@ -21,6 +21,7 @@ class CreatePersonasTable extends Migration
             $table->string('apellido');
             $table->string('correo');
             $table->string('contrasena');
+            $table->boolean('ingresado')->default(false);
          
         });
     }

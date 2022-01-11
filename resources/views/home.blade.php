@@ -8,9 +8,9 @@
 </head>
 <body>
     <a href="{{URL('/registrar')}}"><input type="button" value="Ir"></a>
-    
+    {{csrf_field()}}
     @if(Auth::check())
-        <a href="{{URL('/logout')}}"><input type="button" value="Salir"></a>
+        <a href="{{URL('/ingresado/logout')}}"><input type="button" value="Salir"></a>
         {{Auth::user()->rut}}
     @endif
     
