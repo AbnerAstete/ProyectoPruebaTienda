@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App, Hash;
-use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\ValidacionRegistro;
+use App\Http\Requests\ValidacionIngresar;
+use App\Http\Requests\ValidacionProducto;
 use App\Persona;
 use App\Producto;
 use Auth;
@@ -36,7 +38,7 @@ class PagesController extends Controller
         return view('noaccess');
     }
 
-    public function registrar(StorePostRequest $request){
+    public function registrar(ValidacionRegistro $request){
         $personaNueva = new App\Persona;
         $personaNueva->rut = $request->rut;
         $personaNueva->nombre= $request->nombre;
@@ -47,18 +49,14 @@ class PagesController extends Controller
         return view('registro');
     }
     
-    public function ingresar(Request $request){
-        $request->validate([
-            'rut' => 'required',
-            'contrasena' => 'required'
-        ]);
+    public function ingresar(ValidacionIngresar $request){
         $user = Persona::where('rut',"=",$request->rut)->first();
         Auth::login($user, true);
         log::info(Auth::login($user));   
         return view('home',compact('user'));     
     }   
 
-    public function agregarProducto(Request $request){
+    public function agregarProducto(ValidacionProducto $request){
         $nuevoProducto= new App\Producto;
         $nuevoProducto->nombre_producto=$request->nombre_producto;
         $nuevoProducto->talla_producto=$request->talla_producto;

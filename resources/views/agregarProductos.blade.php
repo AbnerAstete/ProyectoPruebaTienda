@@ -9,6 +9,10 @@
         <form method="POST" action="{{ URL('agregarProducto') }}">
             {{csrf_field()}}
             <br>
+            @foreach ($errors->all() as $error)
+                <div class="alert alert-danger">{{$error}}</div>
+			@endforeach
+            <br>
             <input type="text" name="nombre_producto" placeholder="Ingrese nombre del producto" class="form-control mb-2"/>
             <input type="text" name="talla_producto" placeholder="Ingrese talla del producto" class="form-control mb-2"/>
             <input type="text" name="disponibilidad_producto" placeholder="Ingrese disponibilidad del producto" class="form-control mb-2"/>
