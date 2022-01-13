@@ -19,6 +19,7 @@ class Persona extends Model implements Authenticatable
     public function getAuthIdentifierName(){
         return 'id';
     }
+
    
    
            /**

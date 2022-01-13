@@ -5,7 +5,7 @@ use App\Persona;
 use Log;
 use Closure;
 use Illuminate\Http\Request;
-
+use Auth;
 
 // class CreateUserTable extends Migration
 
@@ -31,15 +31,16 @@ class Ingresado
 
     public function handle($request, Closure $next)
     {   
-        
+        dd($request);
         //Log::info($request);
 
-        if($request->user()->ingresado){
+        //if(Auth::check()){($request->user()->ingresado){
+        if ($request->user()) {
 
             return $next($request);
         }
         else{
-            return abort(403);
+            return 'hola';
             //return view('noaccess');
         }
         //return $next($request);
