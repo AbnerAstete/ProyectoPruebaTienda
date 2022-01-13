@@ -25,12 +25,19 @@ Route::post('/registrar', 'PagesController@registrar');
 
 
 // Usuario Ingresado
-// Route::group(['prefix' => 'ingresado','middleware'=>'ingresado'],function(){
 
-//     Route::get('/noaccess','PagesController@noaccess');
-    
-//     Route::get('/logout', 'PagesController@logout');
+Route::group(['prefix' => 'ingresado','middleware'=>'ingresado'],function(){
 
-// });
-Route::get('ingresado/noaccess','PagesController@noaccess')->middleware('ingresado');
-Route::get('ingresado/logout', 'PagesController@logout')->middleware('ingresado');
+    Route::get('noaccess','PagesController@noaccess');
+    Route::get('logout', 'PagesController@logout');
+
+});
+
+Route::get('agregarProducto','PagesController@producto');
+Route::post('agregarProducto','PagesController@agregarProducto');
+Route::get('mostrarProducto','PagesController@mostrarProducto');
+
+
+
+// Route::get('ingresado/noaccess','PagesController@noaccess')->middleware('ingresado');
+// Route::get('ingresado/logout', 'PagesController@logout')->middleware('ingresado');

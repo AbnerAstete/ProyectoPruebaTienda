@@ -30,19 +30,22 @@ class Ingresado
 
 
     public function handle($request, Closure $next)
-    {   
-        dd($request);
+    {       
+        
+        //dd(Auth::check());
         //Log::info($request);
 
-        //if(Auth::check()){($request->user()->ingresado){
-        if ($request->user()) {
+        if(Auth::check()){
 
             return $next($request);
-        }
-        else{
-            return 'hola';
-            //return view('noaccess');
-        }
+        }else{
+
+            return response()->view('noaccess');
+            //->withCookie(cookie('referrer', request()->referrer, 45000));
+        //return response(403);
         //return $next($request);
+        }
+        
+        
     }
 }

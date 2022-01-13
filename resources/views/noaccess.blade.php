@@ -9,5 +9,6 @@
 
 <body>
     <h1> Acceso Restringido </h1>
+    {{csrf_field()}}
 </body>
 </html>
