@@ -35,7 +35,6 @@ Route::group(['prefix' => 'ingresado','middleware'=>'ingresado'],function(){
 
 Route::get('agregarProducto','PagesController@producto');
 Route::post('agregarProducto','PagesController@agregarProducto');
-
 Route::get('mostrarProducto','PagesController@mostrarProducto');
 
 

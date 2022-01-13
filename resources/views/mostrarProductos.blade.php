@@ -9,6 +9,7 @@
         <th scope="col">Id</th>
         <th scope="col">Nombre</th>
         <th scope="col">Talla</th>
+        <th scope="col">Precio</th>
         <th scope="col">Disponibilidad</th>
         <th scope="col">Stock</th>
         <th scope="col">Descripcion</th>
@@ -21,6 +22,7 @@
         <th scope="row">{{ $item->id_producto }}</th>
         <td>{{ $item->nombre_producto }}</td>
         <td>{{ $item->talla_producto }}</td>
+        <td>{{ $item->precio_producto }}</td>
         <td>{{ $item->disponibilidad_producto }}</td>
         <td>{{ $item->stock_producto }}</td>
         <td>{{ $item->descripcion }}</td>
