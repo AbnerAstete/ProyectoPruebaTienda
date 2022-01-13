@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App, Hash;
 use App\Http\Requests\StorePostRequest;
 use App\Persona;
+use App\Producto;
 use Auth;
 use Log;
 use Session;
@@ -18,6 +19,10 @@ class PagesController extends Controller
 
     public function login(){
         return view('registro');
+    }
+
+    public function producto(){
+        return view('agregarProductos');
     }
 
     public function logout(){
@@ -59,7 +64,31 @@ class PagesController extends Controller
         return view('home',compact('user'));     
     }   
 
+    public function agregarProducto(Request $request){
+
+        $nuevoProducto= new App\Producto;
+        $nuevoProducto->nombre_producto=$request->nombre_producto;
+        $nuevoProducto->talla_producto=$request->talla_producto;
+        $nuevoProducto->disponibilidad_producto=$request->disponibilidad_producto;
+        $nuevoProducto->stock_producto=$request->stock_producto;
+        $nuevoProducto->descripcion=$request->descripcion_producto;
+        $nuevoProducto->save();
+        return view('agregarProductos');
         
+    }
+    public function mostrarProducto(Request $request){
+
+
+        $productos= App\Producto::all();
+
+
+        return view('mostrarProductos',compact('productos'));
+    }
+
+
+
+
+    // }
     
 
 }
