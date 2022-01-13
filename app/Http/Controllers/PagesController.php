@@ -23,8 +23,8 @@ class PagesController extends Controller
     public function logout(){
         log::info('logout');
         Auth::logout();
-        return 'hola';
-        //return view('home');
+        // return 'hola';
+        return view('home');
     }
 
     public function noaccess(){
