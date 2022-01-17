@@ -29,8 +29,6 @@ class PagesController extends Controller
 
     }
 
-<<<<<<< Updated upstream
-=======
     public function editarProducto($id_producto){
         $producto = App\Producto::findOrFail($id_producto);
         return view('updatesProductos', compact('producto'));
@@ -56,5 +54,4 @@ class PagesController extends Controller
     // }
     
 
->>>>>>> Stashed changes
 }

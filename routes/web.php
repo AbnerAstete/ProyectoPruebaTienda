@@ -17,8 +17,6 @@ Route::get('/registrar','PagesController@login');
 
 Route::post('/registrar', 'PagesController@registrar');
 
-<<<<<<< Updated upstream
-=======
 
 // Usuario Ingresado
 
@@ -39,4 +37,3 @@ Route::put('updateProducto','PagesController@updateProducto');
 
 // Route::get('ingresado/noaccess','PagesController@noaccess')->middleware('ingresado');
 // Route::get('ingresado/logout', 'PagesController@logout')->middleware('ingresado');
->>>>>>> Stashed changes
