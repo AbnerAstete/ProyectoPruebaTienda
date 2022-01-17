@@ -33,11 +33,17 @@ Route::group(['prefix' => 'ingresado','middleware'=>'ingresado'],function(){
 
 });
 
+// Acciones Admin
+//----- Crud Usuarios
+Route::get('mostrarUsuarios','PagesController@mostrarUsuarios');
+Route::delete('eliminarUsuarios/{id}','PagesController@eliminarUsuarios');
+//----- Crud Productos
 Route::get('agregarProducto','PagesController@producto');
 Route::post('agregarProducto','PagesController@agregarProducto');
 Route::get('mostrarProducto','PagesController@mostrarProducto');
-Route::get('editarProducto','PagesController@editarProducto');
-Route::put('updateProducto','PagesController@updateProducto');
+Route::get('editarProducto/{id_producto}','PagesController@editarProducto');
+Route::put('updateProductos/{id_producto}','PagesController@updateProductos');
+Route::delete('eliminarProducto/{id_producto}','PagesController@eliminarProducto');
 
 
 

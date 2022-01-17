@@ -30,7 +30,6 @@ class PagesController extends Controller
     public function logout(){
         log::info('logout');
         Auth::logout();
-        // return 'hola';
         return view('home');
     }
 
@@ -54,7 +53,19 @@ class PagesController extends Controller
         Auth::login($user, true);
         log::info(Auth::login($user));   
         return view('home',compact('user'));     
-    }   
+    }
+
+    public function mostrarUsuarios(Request $request){
+        $usuarios=App\Persona::all();
+        return view('mostrarUsuarios',compact('usuarios'));
+
+    }
+    public function eliminarUsuarios($id){
+        $usuarioEliminar = App\Persona::findOrFail($id);
+        $usuarioEliminar -> delete();
+        return back()->with('mensaje','Nota Eliminada');
+
+    }
 
     public function agregarProducto(ValidacionProducto $request){
         $nuevoProducto= new App\Producto;
@@ -75,21 +86,25 @@ class PagesController extends Controller
 
     public function editarProducto($id_producto){
         $producto = App\Producto::findOrFail($id_producto);
-        return view('updatesProductos', compact('producto'));
+        return view('updateProductos', compact('producto'));
     }
 
-    public function updateProducto(Request $request,$id_producto){
+    public function updateProductos(Request $request,$id_producto){
         $productoUpdate = App\Producto::findOrFail($id_producto);
         $productoUpdate->nombre_producto=$request->nombre_producto;
         $productoUpdate->talla_producto=$request->talla_producto;
         $productoUpdate->disponibilidad_producto=$request->disponibilidad_producto;
         $productoUpdate->precio_producto=$request->precio_producto;
         $productoUpdate->stock_producto=$request->stock_producto;
-        $productoUpdate->descripcion_producto=$request->descripcion_producto;
-
+        $productoUpdate->descripcion=$request->descripcion_producto;
         $productoUpdate->save();
-
         return back()->with('mensaje','Nota actualizada');
+    }
+
+    public function eliminarProducto($id_producto){
+        $productoEliminar = App\Producto::findOrFail($id_producto);
+        $productoEliminar -> delete();
+        return back()->with('mensaje','Nota Eliminada');
     }
 
 
