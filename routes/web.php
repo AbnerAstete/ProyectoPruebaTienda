@@ -11,7 +11,13 @@
 |
 */
 
+
+//Usuario sin Ingresar
 Route::get('/', 'PagesController@home');
+
+
+// Login/Registro
+Route::post('/ingresar','PagesController@ingresar');
 
 Route::get('/registrar','PagesController@login');
 
