@@ -25,15 +25,14 @@ class ValidacionIngresar extends FormRequest
     {
         return [
             //
-            'rut' => 'required|unique:personas,rut',
-            'contrasena'=> 'required'
+            'rut' => 'required',
+            'contrasena'=> 'required',
         ];
     }
 
     public function messages()
     {
         return[
-            'rut.unique' => ' El rut ya esta en uso ',
             'rut.required' => ' El rut es requerido ',
             'contrasena.required' => ' La contraseña es requerida'     
         ];
