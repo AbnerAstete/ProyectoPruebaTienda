@@ -30,8 +30,16 @@
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-lg-12">
+
+									@if (session('mensaje'))
+										<div class="alert alert-success">
+											{{session('mensaje')}}
+										</div>	
+									@endif
+									
 								<form id="login-form" action="{{URL('/ingresar')}}" method="post" role="form" autocomplete="off" style="display: block;">
 									{{csrf_field()}}
+
 
 									@if (count($errors)> 0)
 										@foreach ($errors->all() as $error)
@@ -72,13 +80,13 @@
 								<form id="register-form" action="{{URL('/registrar')}}"  method="post" role="form" style="display: none;" autocomplete="off">
 									{{csrf_field()}}
 
-									@if (count($errors)> 0)
+									{{-- @if (count($errors)> 0)
 										@foreach ($errors->all() as $error)
 											<p class="alert alert-danger">
 												{{$error}}
 											</p> 																			
 										@endforeach
-									@endif
+									@endif --}}
 									
 									<div class="form-group">
 										<input type="text" name="rut" id="rut" tabindex="1" class="form-control" placeholder=" Ingrese Rut con guion" value="">

@@ -3,6 +3,13 @@
 @section('seccion')
 
 <br><h1>Lista Usuarios:</h1><br>
+
+@if (session('mensaje'))
+		<div class="alert alert-success">
+			{{session('mensaje')}}
+		</div>	
+	@endif
+
 <table class="table">
     <thead>
       <tr>

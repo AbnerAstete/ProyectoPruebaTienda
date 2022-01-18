@@ -45,7 +45,7 @@ class PagesController extends Controller
         $personaNueva->correo= $request->correo;
         $personaNueva->contrasena= Hash::make($request->contrasena);
         $personaNueva->save();
-        return view('registro');
+        return back()->with('mensaje','Usuario Registrado');
     }
     
     public function ingresar(ValidacionIngresar $request){
@@ -63,7 +63,7 @@ class PagesController extends Controller
     public function eliminarUsuarios($id){
         $usuarioEliminar = App\Persona::findOrFail($id);
         $usuarioEliminar -> delete();
-        return back()->with('mensaje','Nota Eliminada');
+        return back()->with('mensaje','Usuario Eliminado');
 
     }
 
@@ -98,13 +98,13 @@ class PagesController extends Controller
         $productoUpdate->stock_producto=$request->stock_producto;
         $productoUpdate->descripcion=$request->descripcion_producto;
         $productoUpdate->save();
-        return back()->with('mensaje','Nota actualizada');
+        return back()->with('mensaje','Producto actualizado');
     }
 
     public function eliminarProducto($id_producto){
         $productoEliminar = App\Producto::findOrFail($id_producto);
         $productoEliminar -> delete();
-        return back()->with('mensaje','Nota Eliminada');
+        return back()->with('mensaje','Producto Eliminado');
     }
 
 
