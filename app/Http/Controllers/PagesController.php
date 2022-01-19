@@ -68,6 +68,7 @@ class PagesController extends Controller
     }
 
     public function agregarProducto(ValidacionProducto $request){
+       
         $nuevoProducto= new App\Producto;
         $nuevoProducto->nombre_producto=$request->nombre_producto;
         $nuevoProducto->talla_producto=$request->talla_producto;
@@ -75,7 +76,20 @@ class PagesController extends Controller
         $nuevoProducto->precio_producto=$request->precio_producto;
         $nuevoProducto->stock_producto=$request->stock_producto;
         $nuevoProducto->descripcion=$request->descripcion_producto;
+        $archivo =$request->file('ruta');
+        //$request->file('ruta')->store('public/imagenes');
+        $nombre=time().$archivo->getClientOriginalName();
+
+        $archivo->move(public_path().'/imagenes/', $nombre);
+        $nuevoProducto->imagen = $nombre;
         $nuevoProducto->save();
+
+        //$nuevoProducto->ruta=$request->file('ruta');
+
+        Log::info($request->file('ruta'));
+        Log::info($request);
+        $nuevoProducto->save();
+        
         return view('agregarProductos');     
     }
 

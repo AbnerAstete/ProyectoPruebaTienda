@@ -23,6 +23,7 @@ class ValidacionProducto extends FormRequest
      */
     public function rules()
     {
+        
         return [
             'nombre_producto' => 'required',
             'precio_producto' => 'required',

@@ -20,6 +20,7 @@
 		<input type="text" name="disponibilidad_producto" placeholder="Disponibilidad" class="form-control mb-2" value="{{$producto->disponibilidad_producto}}"/>
 		<input type="text" name="stock_producto" placeholder="Stock" class="form-control mb-2" value="{{$producto->stock_producto}}"/>
 		<input type="text" name="descripcion_producto" placeholder="Descripcion" class="form-control mb-2" value="{{$producto->descripcion}}"/>
+		
 		<button class="btn btn-warning btn-block" type="submit">Editar</button>
 	</form>
   
