@@ -12,6 +12,8 @@ use App\Producto;
 use Auth;
 use Log;
 use Session;
+use Illuminate\Support\Facades\Validator;
+
 class PagesController extends Controller
 {
     //
@@ -67,7 +69,30 @@ class PagesController extends Controller
 
     }
 
-    public function agregarProducto(ValidacionProducto $request){
+    public function agregarProducto(Request $request){
+        $validador=Validator::make($request->all(),
+            [
+                'nombre_producto' => 'required',
+                'precio_producto' => 'required',
+                'talla_producto' => 'required',
+                'disponibilidad_producto' => 'required',
+                'stock_producto' => 'required',
+                'descripcion_producto' => 'required',
+            ],
+            [
+                'nombre_producto.required'=>'El nombre es requerido',
+                'talla_producto.required'=>'La talla es requerida',
+                'disponibilidad_producto.required'=>'Seleccione una disponibilidad',
+                'precio_producto.required'=>'El precio es requerido',
+                'stock_producto.required'=>'El stock es requerido',
+                'descripcion_producto.required'=>'La descripcion es requerida',
+            ]
+        );
+        if ($validador->fails()){   
+            //retorna los errores
+            //return response()->json(['erroresAgregarproductos'=>$validador->errors()->all()]);
+            return back()->withErrors($validador);
+        }
         $nuevoProducto= new App\Producto;
         $nuevoProducto->nombre_producto=$request->nombre_producto;
         $nuevoProducto->talla_producto=$request->talla_producto;
@@ -76,7 +101,8 @@ class PagesController extends Controller
         $nuevoProducto->stock_producto=$request->stock_producto;
         $nuevoProducto->descripcion=$request->descripcion_producto;
         $nuevoProducto->save();
-        return back()->with('mensaje','Producto Agregado');     
+        return back()->with('mensaje','exitoso');
+                             
     }
 
     public function mostrarProducto(Request $request){

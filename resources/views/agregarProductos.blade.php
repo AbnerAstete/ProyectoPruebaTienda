@@ -27,6 +27,7 @@
             <input type="text" name="stock_producto" placeholder="Ingrese stock del producto" class="form-control mb-2"/>
             <input type="text" name="descripcion_producto" placeholder="Ingrese descripcion del producto" class="form-control mb-2"/>
             <button class="btn btn-primary btn-block" type="submit">Agregar</button>
+            <br>
           </form>
     </div>
 

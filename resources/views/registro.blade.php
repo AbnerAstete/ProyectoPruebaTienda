@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="{{asset('css/style.css') }}">
 <script type="text/javascript" src="{{asset('js/script.js') }}"> </script>
 
-<div class="container">
+<div class="container container-Login">
     	<div class="row">
 			<div class="col-md-6 col-md-offset-3">
 				<div class="panel panel-login">
