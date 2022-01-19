@@ -30,7 +30,7 @@
             <div class="toggle"></div>
         </header>
     
-    <video src="{{asset('video/home/video3.mp4') }}" muted loop autoplay></video>
+    <video src="{{asset('video/home/video1.mp4') }}" muted loop autoplay></video>
     <div class="overlay"></div>
     <div class="text">
         <h2>No Te Detengas</h2>

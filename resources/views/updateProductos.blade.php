@@ -1,6 +1,7 @@
 @extends('plantilla')
 
 @section('seccion')
+	<br><a href="{{URL('mostrarProducto')}}"><input type="button" value="Ver Lista Productos"></a><br>
     <h1>Editar nota: {{$producto->id_producto}}</h1> 
 
     @if (session('mensaje'))

@@ -39,7 +39,31 @@ class PagesController extends Controller
         return view('noaccess');
     }
 
-    public function registrar(ValidacionRegistro $request){
+    public function registrar(Request $request){
+
+        $validador=Validator::make($request->all(),
+            [
+            'rut' => 'required|unique:personas,rut',
+            'nombre'=> 'required',
+            'apellido' => 'required',
+            'correo'=> 'required|unique:personas,correo',
+            'contrasena'=> 'required'
+            ],
+            [
+            'correo.unique' => 'El correo ya esta en uso',
+            'rut.unique' => ' El rut ya esta en uso ',
+            'rut.required' => ' El rut es requerido ',
+            'nombre.required' => ' El nombre es requerido ',
+            'apellido.required' => ' El apellido es requerido ',
+            'correo.required' => ' El correo es requerido ',
+            'contrasena.required' => ' La contraseña es requerida'
+            ]
+        );
+
+        if ($validador->fails()){   
+            return back()->withErrors($validador);
+        }
+
         $personaNueva = new App\Persona;
         $personaNueva->rut = $request->rut;
         $personaNueva->nombre= $request->nombre;
@@ -50,7 +74,22 @@ class PagesController extends Controller
         return back()->with('mensaje','Usuario Registrado');
     }
     
-    public function ingresar(ValidacionIngresar $request){
+    public function ingresar(Request $request){
+        $validador=Validator::make($request->all(),
+            [
+                'rut' => 'required',
+                'contrasena'=> 'required'
+            ],
+            [
+                'rut.required' => ' El rut es requerido ',
+                'contrasena.required' => ' La contraseña es requerida'    
+            ]
+        );
+        
+        if ($validador->fails()){   
+            return back()->withErrors($validador);
+        }
+
         $user = Persona::where('rut',"=",$request->rut)->first();
         Auth::login($user, true);
         log::info(Auth::login($user));   

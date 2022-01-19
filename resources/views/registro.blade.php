@@ -9,10 +9,9 @@
 <!------ Include the above in your HEAD tag ---------->
 
 
-<link rel="stylesheet" href="{{asset('css/style.css') }}">
-<script type="text/javascript" src="{{asset('js/script.js') }}"> </script>
-
-<div class="container container-Login">
+<link rel="stylesheet" href="{{asset('css/login.css') }}">
+<script type="text/javascript" src="{{asset('js/login.js') }}"> </script>
+<div class="container">
     	<div class="row">
 			<div class="col-md-6 col-md-offset-3">
 				<div class="panel panel-login">
