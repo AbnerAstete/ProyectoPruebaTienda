@@ -48,6 +48,16 @@
 											</p> 																			
 										@endforeach
 									@endif
+									{{-- @foreach ($errors->get('rut') as $error)
+                						<div class="alert alert-danger">
+                  							El rut es requerido
+                						</div>
+									@endforeach
+									@foreach ($errors->get('contrasena') as $error)
+                						<div class="alert alert-danger">
+                  							La contrasena es requerida
+                						</div>
+									@endforeach --}}
 
 									
 									<div class="form-group">

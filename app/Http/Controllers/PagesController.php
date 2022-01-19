@@ -76,7 +76,7 @@ class PagesController extends Controller
         $nuevoProducto->stock_producto=$request->stock_producto;
         $nuevoProducto->descripcion=$request->descripcion_producto;
         $nuevoProducto->save();
-        return view('agregarProductos');     
+        return back()->with('mensaje','Producto Agregado');     
     }
 
     public function mostrarProducto(Request $request){

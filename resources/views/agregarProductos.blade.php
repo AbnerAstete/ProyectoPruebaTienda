@@ -2,13 +2,20 @@
 
 @section('seccion')
 
+
 <br>
     <a href="{{URL('/')}}"><input type="button" value="Home"></a>
     <a href="{{URL('mostrarProducto')}}"><input type="button" value="Ver productos"></a>
+<br>
+<br>
+    @if (session('mensaje'))
+		<div class="alert alert-success">
+			{{session('mensaje')}}
+		</div>	
+	@endif
     <div>
         <form method="POST" action="{{ URL('agregarProducto') }}">
             {{csrf_field()}}
-            <br>
             @foreach ($errors->all() as $error)
                 <div class="alert alert-danger">{{$error}}</div>
 			@endforeach

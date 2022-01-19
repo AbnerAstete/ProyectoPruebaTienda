@@ -1,7 +1,7 @@
 @extends('plantilla')
 
 @section('seccion')
-
+<br><a href="{{URL('/')}}"><input type="button" value="Home"></a><br>
 <br><h1>Lista Productos:</h1><br>
 @if (session('mensaje'))
 		<div class="alert alert-success">
