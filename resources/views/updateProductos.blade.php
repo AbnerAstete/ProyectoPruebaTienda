@@ -36,7 +36,7 @@
         <input type="radio" name="disponibilidad_producto" value = 'False' /> No Disponible
 		<input type="text" name="stock_producto" placeholder="Stock" class="form-control mb-2" value="{{$producto->stock_producto}}"/>
 		<textarea name="descripcion_producto" rows="4" cols="10" placeholder="Ingrese descripcion del producto" class="form-control"></textarea>
-		<!-- <input type="file" name="ruta" id="" placeholder="Imagen" class="form-control mb-2"/> -->
+		{{-- <input type="file" name="ruta" id="" placeholder="Imagen" class="form-control mb-2"/>  --}}
 
 		<button class="btn btn-warning btn-block" type="submit">Editar</button>
 	</form>

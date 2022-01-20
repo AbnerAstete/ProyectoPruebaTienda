@@ -1,4 +1,4 @@
-@extends('plantilla')
+{{-- @extends('plantilla')
 
 @section('seccion')
 
@@ -12,9 +12,9 @@
         <br>USUARIO: {{Auth::user()->rut}}<br>
     @endif
 
-@endsection
+@endsection --}}
 
-{{-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -49,7 +49,23 @@
     <div class="menu">
         <ul>
             <li><a href="{{URL('/registrar')}}">Login</a></li>
-            <li><a href="#">Productos</a></li>  
+            <li><a href="#">Productos</a></li>
+
+            @if(Auth::check())
+                @if(Auth::user()->id_tipo_usuario == 1)
+                    <li><a href="{{URL('/ingresado/logout')}}">Salir</a></li>
+                    <br>USUARIO: {{Auth::user()->rut}}
+                    <br>NOMBRE: {{Auth::user()->nombre}}  {{Auth::user()->apellido}} 
+                @endif
+                @if(Auth::user()->id_tipo_usuario == 2)
+                    <li><a href="{{URL('mostrarUsuarios')}}">Lista Usuarios</a></li>
+                    <li><a href="{{URL('agregarProducto')}}">Agregar Productos</a></li>
+                    <li><a href="{{URL('mostrarProducto')}}">Lista Productos</a></li>
+                    <li><a href="{{URL('/ingresado/logout')}}">Salir</a></li>
+                    <br>USUARIO: {{Auth::user()->rut}}
+                    <br>NOMBRE: {{Auth::user()->nombre}}  {{Auth::user()->apellido}} 
+                @endif
+            @endif
         </ul>
     </div>
     <script>
@@ -61,4 +77,4 @@
         })
     </script>
 </body>
-</html> --}}
+</html>
