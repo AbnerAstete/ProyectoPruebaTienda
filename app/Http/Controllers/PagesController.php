@@ -76,10 +76,10 @@ class PagesController extends Controller
         $nuevoProducto->precio_producto=$request->precio_producto;
         $nuevoProducto->stock_producto=$request->stock_producto;
         $nuevoProducto->descripcion=$request->descripcion_producto;
+
         $archivo =$request->file('ruta');
         //$request->file('ruta')->store('public/imagenes');
         $nombre=time().$archivo->getClientOriginalName();
-
         $archivo->move(public_path().'/imagenes/', $nombre);
         $nuevoProducto->imagen = $nombre;
         $nuevoProducto->save();
@@ -102,6 +102,7 @@ class PagesController extends Controller
         $producto = App\Producto::findOrFail($id_producto);
         return view('updateProductos', compact('producto'));
     }
+    
 
     public function updateProductos(Request $request,$id_producto){
         $productoUpdate = App\Producto::findOrFail($id_producto);
@@ -111,7 +112,14 @@ class PagesController extends Controller
         $productoUpdate->precio_producto=$request->precio_producto;
         $productoUpdate->stock_producto=$request->stock_producto;
         $productoUpdate->descripcion=$request->descripcion_producto;
+        $productoUpdate->imagen=$request->imagen;
+        // $archivo =$request->file('ruta');
+        // $request->file('ruta')->store('public/imagenes');
+        // $nombre=time().$archivo->getClientOriginalName();
+        // $archivo->move(public_path().'/imagenes/', $nombre);
+        // $productoUpdate->imagen;
         $productoUpdate->save();
+
         return back()->with('mensaje','Producto actualizado');
     }
 

@@ -9,6 +9,8 @@
 			{{session('mensaje')}}
 		</div>	
 	@endif
+
+
 <table class="table">
     <thead>
       <tr>
@@ -39,6 +41,7 @@
         <td>{{ $item->talla_producto }}</td>
         <td>{{ $item->precio_producto }}</td>
         <td>{{ $item->disponibilidad_producto }}</td>
+
         <td>{{ $item->stock_producto }}</td>
         <td>{{ $item->descripcion }}</td>
         <td> <img src="{{ asset('imagenes/'.$item->imagen) }}"  width='100'> </td>

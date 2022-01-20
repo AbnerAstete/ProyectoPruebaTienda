@@ -1,7 +1,7 @@
 @extends('plantilla')
 
 @section('seccion')
-    <h1>Editar nota: {{$producto->id_producto}}</h1> 
+    <h1>Editar nota: {{$producto->id_producto}}</h1> <br>
 
     @if (session('mensaje'))
 		<div class="alert alert-success">
@@ -16,11 +16,27 @@
 
 		<input type="text" name="nombre_producto" placeholder="Nombre" class="form-control mb-2" value="{{$producto->nombre_producto}}"/>
 		<input type="text" name="precio_producto" placeholder="Precio" class="form-control mb-2" value="{{$producto->precio_producto}}"/>
-		<input type="text" name="talla_producto"  placeholder="Talla" class="form-control mb-2" value="{{$producto->talla_producto}}"/>
-		<input type="text" name="disponibilidad_producto" placeholder="Disponibilidad" class="form-control mb-2" value="{{$producto->disponibilidad_producto}}"/>
-		<input type="text" name="stock_producto" placeholder="Stock" class="form-control mb-2" value="{{$producto->stock_producto}}"/>
-		<input type="text" name="descripcion_producto" placeholder="Descripcion" class="form-control mb-2" value="{{$producto->descripcion}}"/>
+		<!--input type="text" name="talla_producto"  placeholder="Talla" class="form-control mb-2" value="{{$producto->talla_producto}}"/-->
 		
+		Talla 
+		<select name="talla_producto" >
+		<option type="text" name="M">XS</option>
+		<option type="text" name="M">S</option>
+		<option type="text" name="M">M</option>
+		<option type="text" name="M">L</option>
+		<option type="text" name="M">XL</option>
+		<option type="text" name="M">XXL</option>
+		</select>
+	
+
+
+		<!-- <input type="text" name="disponibilidad_producto" placeholder="Disponibilidad" class="form-control mb-2" value="{{$producto->disponibilidad_producto}}"/> -->
+		<br><input type="radio" name="disponibilidad_producto" value = 'True' /> Disponible
+        <input type="radio" name="disponibilidad_producto" value = 'False' /> No Disponible
+		<input type="text" name="stock_producto" placeholder="Stock" class="form-control mb-2" value="{{$producto->stock_producto}}"/>
+		<textarea name="descripcion_producto" rows="4" cols="10" placeholder="Ingrese descripcion del producto" class="form-control"></textarea>
+		<!-- <input type="file" name="ruta" id="" placeholder="Imagen" class="form-control mb-2"/> -->
+
 		<button class="btn btn-warning btn-block" type="submit">Editar</button>
 	</form>
   
