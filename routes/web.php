@@ -11,9 +11,41 @@
 |
 */
 
+
+//Usuario sin Ingresar
 Route::get('/', 'PagesController@home');
+
+
+// Login/Registro
+Route::post('/ingresar','PagesController@ingresar');
 
 Route::get('/registrar','PagesController@login');
 
 Route::post('/registrar', 'PagesController@registrar');
 
+
+// Usuario Ingresado
+
+Route::group(['prefix' => 'ingresado','middleware'=>'ingresado'],function(){
+
+    Route::get('noaccess','PagesController@noaccess');
+    Route::get('logout', 'PagesController@logout');
+
+});
+
+// Acciones Admin
+//----- Crud Usuarios
+Route::get('mostrarUsuarios','PagesController@mostrarUsuarios');
+Route::delete('eliminarUsuarios/{id}','PagesController@eliminarUsuarios');
+//----- Crud Productos
+Route::get('agregarProducto','PagesController@producto');
+Route::post('agregarProducto','PagesController@agregarProducto');
+Route::get('mostrarProducto','PagesController@mostrarProducto');
+Route::get('editarProducto/{id_producto}','PagesController@editarProducto');
+Route::put('updateProductos/{id_producto}','PagesController@updateProductos');
+Route::delete('eliminarProducto/{id_producto}','PagesController@eliminarProducto');
+
+
+
+// Route::get('ingresado/noaccess','PagesController@noaccess')->middleware('ingresado');
+// Route::get('ingresado/logout', 'PagesController@logout')->middleware('ingresado');
