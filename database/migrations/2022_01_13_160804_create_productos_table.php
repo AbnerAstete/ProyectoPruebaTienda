@@ -21,6 +21,7 @@ class CreateProductosTable extends Migration
             $table->boolean('disponibilidad_producto');
             $table->integer('stock_producto');
             $table->text('descripcion');
+            $table->text('imagen');
         });
     }
 

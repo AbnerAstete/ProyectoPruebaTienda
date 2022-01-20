@@ -66,4 +66,10 @@ class Persona extends Model implements Authenticatable
            return $this->email;
        }
 
+    public function tipoUsuario(){ 
+        return $this->belongsTo(Tipo_usuario::class); 
+    }
+
+
+
 }
