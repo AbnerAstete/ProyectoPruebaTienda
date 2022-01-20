@@ -13,7 +13,7 @@
 
 
 //Usuario sin Ingresar
-Route::get('/', 'PagesController@home');
+Route::get('/', 'PagesController@home'); //ola
 
 
 // Login/Registro
