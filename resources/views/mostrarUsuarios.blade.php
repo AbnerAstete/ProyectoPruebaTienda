@@ -17,6 +17,7 @@
         <th scope="col">Rut</th>
         <th scope="col">Nombre</th>
         <th scope="col">Apellido</th>
+        <th scope="col">Tipo Usuario</th>
         <th scope="col">Correo</th>
         <th scope="col">Eliminar</th>
       </tr>
@@ -28,6 +29,7 @@
         <td>{{ $item->rut }}</td>
         <td>{{ $item->nombre }}</td>
         <td>{{ $item->apellido }}</td>
+        <td>{{ $item->tipoUsuario->tipo_usuario }}</td>
         <td>{{ $item->correo }}</td>
         <td>
         <form action="{{URL('eliminarUsuarios',$item->id)}}" method="POST" class="d-inline">
