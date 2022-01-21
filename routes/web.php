@@ -13,8 +13,8 @@
 
 
 //Usuario sin Ingresar
-Route::get('/', 'PagesController@home'); //ola
-
+Route::get('/', 'PagesController@home'); 
+Route::get('productos','PagesController@tiendaProducto');
 
 // Login/Registro
 Route::post('/ingresar','PagesController@ingresar');

@@ -25,14 +25,14 @@ class PagesController extends Controller
         return view('registro');
     }
 
-    public function producto(){
-        return view('agregarProductos');
-    }
-
     public function logout(){
         log::info('logout');
         Auth::logout();
         return view('home');
+    }
+
+    public function producto(){
+        return view('agregarProductos');
     }
 
     public function noaccess(){
@@ -101,12 +101,18 @@ class PagesController extends Controller
         return view('mostrarUsuarios',compact('usuarios'));
 
     }
+
     public function eliminarUsuarios($id){
         $usuarioEliminar = App\Persona::findOrFail($id);
         $usuarioEliminar -> delete();
         return back()->with('mensaje','Usuario Eliminado');
 
     }
+
+    public function tiendaProducto(Request $request){
+        return view('tienda');
+    }
+
 
     public function agregarProducto(Request $request){
         $validador=Validator::make($request->all(),
@@ -127,11 +133,13 @@ class PagesController extends Controller
                 'descripcion_producto.required'=>'La descripcion es requerida',
             ]
         );
+
         if ($validador->fails()){   
             //retorna los errores
             //return response()->json(['erroresAgregarproductos'=>$validador->errors()->all()]);
             return back()->withErrors($validador);
         }
+
         $nuevoProducto= new App\Producto;
         $nuevoProducto->nombre_producto=$request->nombre_producto;
         $nuevoProducto->talla_producto=$request->talla_producto;

@@ -47,17 +47,20 @@
 											</p> 																			
 										@endforeach
 									@endif
-									{{-- @foreach ($errors->get('rut') as $error)
-                						<div class="alert alert-danger">
-                  							El rut es requerido
-                						</div>
-									@endforeach
-									@foreach ($errors->get('contrasena') as $error)
-                						<div class="alert alert-danger">
-                  							La contrasena es requerida
-                						</div>
-									@endforeach --}}
+									
+									
+									{{-- @if ($errors->has('rut'))
+										<p class="alert alert-danger">{{ $errors->first('rut') }}</p>
+									@endif --}}
+									
 
+
+									{{-- @foreach ($errors->get('rut') as $error)
+                							<div class="alert alert-danger">
+                  								{{$error}}
+                							</div>
+									@endforeach --}}
+									
 									
 									<div class="form-group">
 										<input type="text" name="rut" id="rut" tabindex="1" class="form-control" placeholder="Ingrese Rut con guion" value="">
@@ -89,13 +92,12 @@
 								<form id="register-form" action="{{URL('/registrar')}}"  method="post" role="form" style="display: none;" autocomplete="off">
 									{{csrf_field()}}
 
-									{{-- @if (count($errors)> 0)
-										@foreach ($errors->all() as $error)
-											<p class="alert alert-danger">
-												{{$error}}
-											</p> 																			
-										@endforeach
-									@endif --}}
+									
+										{{-- @foreach ($errors->get('rut') as $error)
+                							<div class="alert alert-danger">
+                  								{{$error}}
+                							</div>
+										@endforeach --}}
 									
 									<div class="form-group">
 										<input type="text" name="rut" id="rut" tabindex="1" class="form-control" placeholder=" Ingrese Rut con guion" value="">
