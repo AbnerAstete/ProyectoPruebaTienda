@@ -8,7 +8,7 @@
 		<div class="alert alert-success">
 			{{session('mensaje')}}
 		</div>	
-	@endif
+@endif
 
 
 <table class="table">
@@ -40,7 +40,8 @@
         <td>{{ $item->nombre_producto }}</td>
         <td>{{ $item->talla_producto }}</td>
         <td>{{ $item->precio_producto }}</td>
-        <td>{{ $item->disponibilidad_producto }}</td>
+        
+        <td>{{ ($item->disponibilidad_producto) ? 'Si':'No' }}</td>
 
         <td>{{ $item->stock_producto }}</td>
         <td>{{ $item->descripcion }}</td>
