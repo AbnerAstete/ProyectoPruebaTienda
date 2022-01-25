@@ -1,18 +1,27 @@
 @extends('plantilla')
 
 @section('seccion')
+<ul>
+    <li><a href="{{URL('/registrar')}}">Login</a></li>
+    <li><a href="{{URL('productos')}}">Productos</a></li>
 
-    <br><a href="{{URL('/registrar')}}"><input type="button" value="Log In"></a><br>
-    <br><a href="{{URL('mostrarUsuarios')}}"><input type="button" value="Ver Lista Usuarios"></a><br>
-    <br><a href="{{URL('agregarProducto')}}"><input type="button" value="Agregar Productos"></a><br>
-    <br><a href="{{URL('mostrarProducto')}}"><input type="button" value="Ver Lista Productos"></a><br>
-    {{csrf_field()}}
     @if(Auth::check())
-        <br><a href="{{URL('/ingresado/logout')}}"><input type="button" value="Salir"></a><br>
-        <br>USUARIO: {{Auth::user()->rut}}<br>
+        @if(Auth::user()->id_tipo_usuario == 1)
+            <li><a href="{{URL('/ingresado/logout')}}">Salir</a></li>
+            <br>USUARIO: {{Auth::user()->rut}}
+            <br>NOMBRE: {{Auth::user()->nombre}}  {{Auth::user()->apellido}} 
+        @endif
+        @if(Auth::user()->id_tipo_usuario == 2)
+            <li><a href="{{URL('mostrarUsuarios')}}">Lista Usuarios</a></li>
+            <li><a href="{{URL('agregarProducto')}}">Agregar Productos</a></li>
+            <li><a href="{{URL('mostrarProducto')}}">Lista Productos</a></li>
+            <li><a href="{{URL('/ingresado/logout')}}">Salir</a></li>
+            <br>USUARIO: {{Auth::user()->rut}}
+            <br>NOMBRE: {{Auth::user()->nombre}}  {{Auth::user()->apellido}} 
+        @endif
     @endif
-
-@endsection
+</ul>
+@endsection 
 
 {{-- <!DOCTYPE html>
 <html lang="en">
