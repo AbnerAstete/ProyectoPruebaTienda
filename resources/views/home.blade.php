@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="{{asset('css/home.css') }}">
-    <title>Home</title>
-</head>
-<body>
+@extends('plantilla')
+
+@section('seccion')
+
     <section class="showcase">
         <header>
             <h2 class="logo">Travel</h2>
@@ -60,5 +54,4 @@
             showcase.classList.toggle('active');
         })
     </script>
-</body>
-</html>
+@endsection    

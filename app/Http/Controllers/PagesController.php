@@ -13,6 +13,7 @@ use Auth;
 use Log;
 use Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Supoort\Facades\BD;
 
 class PagesController extends Controller
 {
@@ -40,12 +41,12 @@ class PagesController extends Controller
     }
 
     public function registrar(Request $request){
-
-        $validador=Validator::make($request->all(),
+        try {
+            $validador=Validator::make($request->all(),
             [
-            'rut' => 'required|unique:personas,rut',
-            'nombre'=> 'required',
-            'apellido' => 'required',
+            'rut' => 'required|unique:personas,rut|regex:/^([0-9]{8})+-[0-9k]{1}$/u',
+            'nombre'=> 'required|regex:/^[a-zA-Z\s]+$/u',
+            'apellido' => 'required|regex:/^[a-zA-Z\s]+$/u',
             'correo'=> 'required|unique:personas,correo',
             'contrasena'=> 'required'
             ],
@@ -53,15 +54,18 @@ class PagesController extends Controller
             'correo.unique' => 'El correo ya esta en uso',
             'rut.unique' => ' El rut ya esta en uso ',
             'rut.required' => ' El rut es requerido ',
+            'rut.regex' => ' Ingreso erronamente su rut ',
             'nombre.required' => ' El nombre es requerido ',
+            'nombre.regex' => 'El nombre debe contener solo letras',
             'apellido.required' => ' El apellido es requerido ',
+            'apellido.regex' => ' El apellido debe contener solo letras ',
             'correo.required' => ' El correo es requerido ',
             'contrasena.required' => ' La contraseña es requerida'
             ]
         );
 
         if ($validador->fails()){   
-            return back()->withErrors($validador);
+            return response()->json(["error" => $validador->errors()->all() ]);
         }
 
         $personaNueva = new App\Persona;
@@ -71,11 +75,16 @@ class PagesController extends Controller
         $personaNueva->correo= $request->correo;
         $personaNueva->contrasena= Hash::make($request->contrasena);
         $personaNueva->save();
-        return back()->with('mensaje','Usuario Registrado');
+        return response()->json(["exito" => 'USuario Registrado ']);
+        } catch (\Throwable $th) {
+            Log::info($th);
+        }
+        
     }
     
     public function ingresar(Request $request){
-        $validador=Validator::make($request->all(),
+        try {
+            $validador=Validator::make($request->all(),
             [
                 'rut' => 'required',
                 'contrasena'=> 'required'
@@ -87,13 +96,30 @@ class PagesController extends Controller
         );
         
         if ($validador->fails()){   
-            return back()->withErrors($validador);
+            return response()->json(["error" => $validador->errors()->all() ]);
+        }
+ 
+        $user = Persona::where('rut',"=",$request->rut)->first();
+        
+        if(!$user){
+            return response()->json(["rutErroneo" => " Rut o Contraseña erronea"]);
         }
 
-        $user = Persona::where('rut',"=",$request->rut)->first();
-        Auth::login($user, true);
-        log::info(Auth::login($user));   
-        return view('home',compact('user'));     
+        if (Hash::check($request->contrasena, $user->contrasena)){
+            Auth::login($user, true);
+            return response()->json(["exito" => true]);
+        }
+        else{
+            return response()->json(["ContrasenaErronea" => "Rut o Contraseña erronea"]);
+        }
+        } catch (\Throwable $th) {
+           Log::info($th);
+        }   
+    }
+
+    public function register(Request $request){
+        Log::info($request);
+        return $request;
     }
 
     public function mostrarUsuarios(Request $request){
@@ -135,8 +161,6 @@ class PagesController extends Controller
         );
 
         if ($validador->fails()){   
-            //retorna los errores
-            //return response()->json(['erroresAgregarproductos'=>$validador->errors()->all()]);
             return back()->withErrors($validador);
         }
 

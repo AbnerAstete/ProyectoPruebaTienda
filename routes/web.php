@@ -15,6 +15,9 @@
 //Usuario sin Ingresar
 Route::get('/', 'PagesController@home'); 
 Route::get('productos','PagesController@tiendaProducto');
+Route::get('ejemplo','PagesController@ejemplo');
+Route::post('register','PagesController@register');
+Route::get('comprobarRut','PagesController@comprobarRut');
 
 // Login/Registro
 Route::post('/ingresar','PagesController@ingresar');
