@@ -7,22 +7,23 @@
             <h2 class="logo">Travel</h2>
             <div class="toggle"></div>
         </header>
-    
-    <video src="{{asset('video/home/video1.mp4') }}" muted loop autoplay></video>
-    <div class="overlay"></div>
-    <div class="text">
-        <h2>No Te Detengas</h2>
-        <h3>Imagine un texto</h3>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab placeat dicta sequi expedita voluptatum repellendus quidem
-             quisquam deleniti modi, rerum quaerat magnam corrupti debitis, atque exercitationem soluta neque ut enim.</p>
-        <a href="#">Explora</a>
-    </div>
+        
+        <video src="{{asset('video/home/video1.mp4') }}" muted loop autoplay></video>
+        <div class="overlay"></div>
+        <div class="text">
+            <h2>No Te Detengas</h2>
+            <h3>Imagine un texto</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab placeat dicta sequi expedita voluptatum repellendus quidem
+                quisquam deleniti modi, rerum quaerat magnam corrupti debitis, atque exercitationem soluta neque ut enim.</p>
+            <a href="#">Explora</a>
+        </div>
 
-    <ul class="social">
-        <li><a href="#"><img src="{{asset('img/home/facebook.png') }}" alt=""></a></li>
-        <li><a href="#"><img src="{{asset('img/home/twitter.png') }}" alt=""></a></li>
-        <li><a href="#"><img src="{{asset('img/home/instagram.png') }}" alt=""></a></li>
-    </ul>
+        <ul class="social">
+            <li><a href="#"><img src="{{asset('img/home/facebook.png') }}" alt=""></a></li>
+            <li><a href="#"><img src="{{asset('img/home/twitter.png') }}" alt=""></a></li>
+            <li><a href="#"><img src="{{asset('img/home/instagram.png') }}" alt=""></a></li>
+        </ul>
+        
     </section>
     <div class="menu">
         <ul>

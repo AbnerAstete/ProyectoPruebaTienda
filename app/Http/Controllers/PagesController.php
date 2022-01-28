@@ -12,6 +12,8 @@ use App\Producto;
 use Auth;
 use Log;
 use Session;
+use DB;
+
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Supoort\Facades\BD;
 
@@ -200,20 +202,67 @@ class PagesController extends Controller
     
 
     public function updateProductos(Request $request,$id_producto){
+        
+        $validador=Validator::make($request->all(),
+        [
+            'nombre_producto' => 'required',
+            'precio_producto' => 'required',
+            'talla_producto' => 'required',
+            'disponibilidad_producto' => 'required',
+            'stock_producto' => 'required',
+            //'descripcion_producto' => 'required',
+        ],
+        [
+            'nombre_producto.required'=>'El nombre es requerido',
+            'talla_producto.required'=>'La talla es requerida',
+            'disponibilidad_producto.required'=>'Seleccione una disponibilidad',
+            'precio_producto.required'=>'El precio es requerido',
+            'stock_producto.required'=>'El stock es requerido',
+            //'descripcion_producto.required'=>'La descripcion es requerida',
+        ]
+    );
+    if ($validador->fails()){   
+        //retorna los errores
+        //return response()->json(['erroresAgregarproductos'=>$validador->errors()->all()]);
+        return back()->withErrors($validador);
+    }
+        Log::info($request );
+        Log::info($request->disponibilidad_producto);
         $productoUpdate = App\Producto::findOrFail($id_producto);
         $productoUpdate->nombre_producto=$request->nombre_producto;
         $productoUpdate->talla_producto=$request->talla_producto;
-        $productoUpdate->disponibilidad_producto=$request->disponibilidad_producto;
-        $productoUpdate->precio_producto=$request->precio_producto;
+        $productoUpdate->disponibilidad_producto=($request->disponibilidad_producto=='True') ? 1:0;
+        $productoUpdate->precio_producto=$request->precio_producto; 
         $productoUpdate->stock_producto=$request->stock_producto;
-        $productoUpdate->descripcion=$request->descripcion_producto;
-        $productoUpdate->imagen=$request->imagen;
-        // $archivo =$request->file('ruta');
-        // $request->file('ruta')->store('public/imagenes');
-        // $nombre=time().$archivo->getClientOriginalName();
-        // $archivo->move(public_path().'/imagenes/', $nombre);
-        // $productoUpdate->imagen;
-        $productoUpdate->save();
+        $productoUpdate->descripcion=($request->descripcion_producto)? $request->descripcion_producto:'';
+        //$productoUpdate->save();
+        //$character= Producto::find($id_producto); //buscas el registro por id.
+        $ImageToDelete = $productoUpdate->imagen; //asignas el nombre del archivo guardado.
+         //eliminas el archivo de la ruta.
+        Log::info($ImageToDelete );
+        //Log::info($productoUpdate->imagen );
+        if($request->hasFile('ruta')){ 
+            $archivo = $request->file('ruta');
+            Log::info($archivo);
+            $nombre=time().$archivo->getClientOriginalName();
+            $archivo->move(public_path().'/imagenes/', $nombre);
+
+            $file_path = public_path().'/imagenes/'.$ImageToDelete; //agregas el nombre del archivo a la ruta donde esta guardado.
+            \File::delete($file_path);
+        //     $archivo->imagen=$request->imagen;
+        //     $archivo = $request->file('ruta');
+        //     $productoUpdate->imagen=$archivo;
+        //     //$nombre=time().$archivo->getClien;tOriginalName();
+        //     $archivo->move(public_path().'/imagenes/',  $archivo);
+        //     $nuevoProducto->imagen = $archivo;
+        
+        //$request->file('ruta')->store('public/imagenes');
+        $productoUpdate->imagen = $nombre;
+        Log::info($productoUpdate );
+
+    }
+        
+    $productoUpdate->save();
 
         return back()->with('mensaje','Producto actualizado');
     }
