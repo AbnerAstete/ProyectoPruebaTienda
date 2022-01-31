@@ -13,7 +13,7 @@
         @endif
         @if(Auth::user()->id_tipo_usuario == 2)
             <li><a href="{{URL('mostrarUsuarios')}}">Lista Usuarios</a></li>
-            <li><a href="{{URL('agregarProducto')}}">Agregar Productos</a></li>
+            <li><a href="{{URL('vistaProducto')}}">Agregar Productos</a></li>
             <li><a href="{{URL('mostrarProducto')}}">Lista Productos</a></li>
             <li><a href="{{URL('/ingresado/logout')}}">Salir</a></li>
             <br>USUARIO: {{Auth::user()->rut}}

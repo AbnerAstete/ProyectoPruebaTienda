@@ -45,10 +45,15 @@
 
         <td>{{ $item->stock_producto }}</td>
         <td>{{ $item->descripcion }}</td>
+        @if($item->imagen)
+
         <td> <img src="{{ asset('imagenes/'.$item->imagen) }}"  width='100'> </td>
+        @else
+        <td> <img src="{{ asset('imagenes/default.jpg') }}"  width='100'> </td>
+        @endif
         <td> <a href="{{URL('editarProducto',$item->id_producto)}}" class="btn btn-warning btn-sm">Editar</a></td>
         <td>
-        <form action="{{URL('eliminarProducto',$item->id_producto)}}" method="POST" class="d-inline">
+        <form action="{{URL('eliminarProducto',$item->id_producto)}}" method="POST" enctype ="multipart/form-data" class="d-inline">
           {{method_field('DELETE')}}
           {{csrf_field()}}
           <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
@@ -94,7 +99,12 @@
 
         <td>{{ $item->stock_producto }}</td>
         <td>{{ $item->descripcion }}</td>
-        <td> <img src="{{ asset('imagenes/'.$item->imagen) }}"  width='100'> </td>
+        @if($item->imagen)
+
+          <td> <img src="{{ asset('imagenes/'.$item->imagen) }}"  width='100'> </td>
+          @else
+          <td> <img src="{{ asset('imagenes/default.jpg') }}"  width='100'> </td>
+          @endif
         <td> <a href="{{URL('editarProducto',$item->id_producto)}}" class="btn btn-warning btn-sm">Editar</a></td>
         <td>
         <form action="{{URL('eliminarProducto',$item->id_producto)}}" method="POST" class="d-inline">
