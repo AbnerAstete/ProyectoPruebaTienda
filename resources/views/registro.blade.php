@@ -4,6 +4,7 @@
 
 
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+{{-- <meta name="csrf-token" content="{{ csrf_token() }}">| --}}
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <!------ Include the above in your HEAD tag ---------->
@@ -29,42 +30,18 @@
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-lg-12">
-
-									@if (session('mensaje'))
-										<div class="alert alert-success">
-											{{session('mensaje')}}
-										</div>	
-									@endif
 									
-								<form id="login-form" action="{{URL('/ingresar')}}" method="post" role="form" autocomplete="off" style="display: block;">
+								<form id="login-form" method="post" role="form" autocomplete="off" style="display: block;">
 									{{csrf_field()}}
-
-
-									@if (count($errors)> 0)
-										@foreach ($errors->all() as $error)
-											<p class="alert alert-danger">
-												{{$error}}
-											</p> 																			
-										@endforeach
-									@endif
-									{{-- @foreach ($errors->get('rut') as $error)
-                						<div class="alert alert-danger">
-                  							El rut es requerido
-                						</div>
-									@endforeach
-									@foreach ($errors->get('contrasena') as $error)
-                						<div class="alert alert-danger">
-                  							La contrasena es requerida
-                						</div>
-									@endforeach --}}
-
 									
 									<div class="form-group">
-										<input type="text" name="rut" id="rut" tabindex="1" class="form-control" placeholder="Ingrese Rut con guion" value="">
+										<input type="text" name="rut" id="rutLogin" tabindex="1" class="form-control" placeholder="Ingrese Rut con guion" value="">
 									</div>
+									<p class="text-danger mb-2 d-none" id="alertRutLogin"></p>
 									<div class="form-group">
-										<input type="password" name="contrasena" id="contrasena" tabindex="2" class="form-control" placeholder="Contraseña">
+										<input type="password" name="contrasena" id="contrasenaLogin" tabindex="2" class="form-control" placeholder="Contraseña">
 									</div>
+									<p class="text-danger mb-2 d-none" id="alertContrasenaLogin"></p>
 									<div class="form-group text-center">
 										<input type="checkbox" tabindex="3" class="" name="remember" id="remember">
 										<label for="remember">Recordar Contraseña</label>
@@ -85,42 +62,43 @@
 											</div>
 										</div>
 									</div>
+									<div class="alert alert-success mt-2 d-none" id="alertSuccessLogin"></div>
 								</form>
-								<form id="register-form" action="{{URL('/registrar')}}"  method="post" role="form" style="display: none;" autocomplete="off">
+								
+
+								<form id="register-form"  method="post" role="form" style="display: none;" autocomplete="off">
 									{{csrf_field()}}
 
-									{{-- @if (count($errors)> 0)
-										@foreach ($errors->all() as $error)
-											<p class="alert alert-danger">
-												{{$error}}
-											</p> 																			
-										@endforeach
-									@endif --}}
-									
 									<div class="form-group">
-										<input type="text" name="rut" id="rut" tabindex="1" class="form-control" placeholder=" Ingrese Rut con guion" value="">
+										<input type="text" name="rut" id="rutRegistro" tabindex="1" class="form-control" placeholder=" Ingrese Rut con guion" value="">
 									</div>
+									<p class="text-danger mb-2 d-none" id="alertRut"></p>
 									<div class="form-group">
-										<input type="text" name="nombre" id="nombre" tabindex="1" class="form-control" placeholder="Ingrese Nombre" value="">
+										<input type="text" name="nombre" id="nombreRegistro" tabindex="1" class="form-control" placeholder="Ingrese Nombre" value="">
 									</div>
+									<p class="text-danger mb-2 d-none" id="alertNombre"></p>
 									<div class="form-group">
-										<input type="text" name="apellido" id="apellido" tabindex="1" class="form-control" placeholder="Ingrese Apellido" value="">
+										<input type="text" name="apellido" id="apellidoRegistro" tabindex="1" class="form-control" placeholder="Ingrese Apellido" value="">
 									</div>
+									<p class="text-danger mb-2 d-none" id="alertApellido"></p>
 									<div class="form-group">
-										<input type="email" name="correo" id="correo" tabindex="1" class="form-control" placeholder="Email: example@email.com " value="">
+										<input type="email" name="correo" id="correoRegistro" tabindex="1" class="form-control" placeholder="Email: example@email.com " value="">
 									</div>
+									<p class="text-danger mb-2 d-none" id="alertCorreo"></p>
 									<div class="form-group">
-										<input type="password" name="contrasena" id="contrasena" tabindex="2" class="form-control" placeholder="Ingrese Contraseña">
+										<input type="password" name="contrasena" id="contrasenaRegistro" tabindex="2" class="form-control" placeholder="Ingrese Contraseña">
 									</div>
+									<p class="text-danger mb-2 d-none" id="alertContrasena"></p>
 									<div class="form-group">
 										<div class="row">
 											<div class="col-sm-6 col-sm-offset-3">
 												<input  type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Registrarse">
-											 
 											</div>
 										</div>
 									</div>
+									<div class="alert alert-success mt-2 d-none" id="alertSuccess"></div>
 								</form>
+								
 							</div>
 						</div>
 					</div>
