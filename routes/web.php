@@ -14,10 +14,11 @@
 
 //Usuario sin Ingresar
 Route::get('/', 'PagesController@home'); 
-Route::get('productos','PagesController@tiendaProducto');
+
 Route::get('ejemplo','PagesController@ejemplo');
 Route::post('register','PagesController@register');
 Route::get('comprobarRut','PagesController@comprobarRut');
+
 
 // Login/Registro
 Route::post('/ingresar','PagesController@ingresar');
@@ -52,3 +53,8 @@ Route::delete('eliminarProducto/{id_producto}','PagesController@eliminarProducto
 
 // Route::get('ingresado/noaccess','PagesController@noaccess')->middleware('ingresado');
 // Route::get('ingresado/logout', 'PagesController@logout')->middleware('ingresado');
+
+Route::get('productos','PagesController@tiendaProducto');
+Route::get('productoSeleccionado/{id_producto}','PagesController@productoSeleccionado');
+Route::get('carrito','PagesController@carrito');
+Route::get('ingresoRequerido','PagesController@ingresoRequerido');
