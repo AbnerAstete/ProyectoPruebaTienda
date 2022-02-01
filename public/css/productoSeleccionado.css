@@ -1,0 +1,27 @@
+body {
+    padding-top: 40px;
+}
+.encabezado{
+    text-align: center;
+    padding-bottom: 40px;
+}
+.nombre{
+    font-size: 25;
+}
+.imagen{
+        height: 450px;
+        align-self: center;
+}
+.tallas{
+        height: 350px;
+        align-self: center;
+}
+.col-4{
+    margin: 1em;
+    text-align: left; 
+
+}
+
+.carrito{
+    display: inline-flex;
+}

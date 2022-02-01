@@ -138,7 +138,8 @@ class PagesController extends Controller
     }
 
     public function tiendaProducto(Request $request){
-        return view('tienda');
+        $productos= App\Producto::all();
+        return view('tiendaProducto',compact('productos'));
     }
 
 
@@ -305,8 +306,17 @@ class PagesController extends Controller
     }
 
 
+    public function productoSeleccionado($id_producto){
+        $producto = App\Producto::findOrFail($id_producto);
+        return view('productoSeleccionado',compact('producto'));
+    }
 
-
+    public function carrito(Request $request){
+        return 'carrito';
+    }
+    public function ingresoRequerido(Request $request){
+        return 'Ingreso Requerido';
+    }
     // }
 
 
