@@ -70,6 +70,9 @@ class Persona extends Model implements Authenticatable
         return $this->belongsTo('App\Tipo_usuario','id_tipo_usuario'); 
     }
 
+    public function compra(){
+        return $this->belongsToMany(Producto::class); // Muchos a muchos
+    }
 
 
 }
