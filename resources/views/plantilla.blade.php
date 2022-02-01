@@ -15,6 +15,11 @@
     <link rel="stylesheet" href="{{asset('css/home.css') }}">
     <link rel="stylesheet" href="css/sweetalert2.min.css">
     <script src="js/sweetalert2.min.js"></script>
+
+
+
+
+    
 </head>
 <body>
     <div class="container">
