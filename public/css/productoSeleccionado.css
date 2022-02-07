@@ -23,5 +23,9 @@ body {
 }
 
 .carrito{
+    float: right;
+}
+
+.boton-carrito{
     display: inline-flex;
 }

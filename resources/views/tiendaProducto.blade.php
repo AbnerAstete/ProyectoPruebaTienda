@@ -2,9 +2,18 @@
 <link rel="stylesheet" href="{{asset('css/tiendaProducto.css') }}">
 <script type="text/javascript" src="{{asset('js/tiendaProducto.js') }}"> </script>
 @section('seccion')
-	<h1 class="encabezado">PRODUCTOS</h1>
 
-    <br>
+    <a  href="{{URL('')}}" type="button" class=" home btn btn-dark">Home</a>
+    <div class="carrito">
+        
+        @if(Auth::check())
+            <a  href="{{URL('carrito')}}" type="button" class=" carrito btn btn-dark">Carrito({{count($compraCliente)}})</a>
+        {{-- @else
+            <a  href="{{URL('/registrar')}}" type="button" class="carrito btn btn-dark">Carrito</a> --}}
+        @endif
+    </div>
+
+	<h1 class="encabezado">PRODUCTOS</h1><br>
     
     
     <div class="row">

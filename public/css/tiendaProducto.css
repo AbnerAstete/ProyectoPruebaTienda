@@ -22,3 +22,7 @@ body {
   .card-block{
     padding-top: 50px;
   }
+  
+  .carrito{
+    float: right;
+}

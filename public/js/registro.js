@@ -96,7 +96,7 @@ $('#login-submit').click(function(e){
 				console.log(data);
 
 				if(data.exito){
-					window.location.href = "http://localhost/ProyectoPruebaTienda/public/";
+					window.location.href = "http://localhost/tienda/public/";
 				}
 
 				if(data.rutErroneo){
