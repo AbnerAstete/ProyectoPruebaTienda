@@ -48,6 +48,14 @@
             <textarea name="descripcion_producto" id ="descripcion_producto" rows="4" cols="10" placeholder="Ingrese descripcion del producto" class="form-control" ></textarea>
             <input type="file" name="ruta" id="ruta"  placeholder="Ingrese una imagen del producto" class="form-control mb-2"/>
             <p class="text-danger mb-2 d-none" id="alert_descripcion_producto"></p>
+            
+           @foreach ($categorias as $item)
+            @if($item->visible) 
+                <input type="checkbox" id="categorias" name="categorias[]" value="{{$item->id_categoria}}">{{$item->nombre_categoria}}
+            @endif
+           @endforeach
+         
+            
 
             <button class="btn btn-primary btn-block" type="submit" id = "producto-submit">Agregar</button>
             <div class="alert alert-succes my2 d-none" id ="alertSuccess"></div>
