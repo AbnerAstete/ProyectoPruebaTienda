@@ -8,39 +8,8 @@ $(function() {
         const alertCantidad = document.getElementById("alertCantidad");
         const alertSuccess = document.getElementById("alertSuccess");
 
-        // const RegCantidad = '{{$producto->stock_producto}}';
-
-        // const mostrarMensajeError = (errores) => {
-        //     errores.forEach((item) => {
-        //         item.tipo.classList.remove("d-none");
-        //         item.tipo.textContent = item.msg;
-        //     });
-        // };
-
         formularioCantidadSeleccionada.addEventListener("submit", (e)=>{
             e.preventDefault();
-		    // alertSuccess.classList.add("d-none");
-
-            // const errores = [];
-
-            // if(!RegCantidad.test(cantidadProducto.value)){
-            //     cantidadProducto.classList.add("is-invalid")
-            //     errores.push({
-            //         tipo: alertCantidad,
-            //         msg: "Ingrese una cantidad valida."
-            //     });
-            // }else{
-            //     cantidadProducto.classList.remove("is-invalid");
-            //     cantidadProducto.classList.add("is-valid");
-            //     alertCantidad.classList.add("d-none");
-            // }
-    
-            // if (errores.length !== 0) {
-            //     mostrarMensajeError(errores);
-            //     return;
-            // }
-    
-            // console.log("Formulario enviado con exito");
     
             $.ajax({
                 type: "POST",
@@ -61,7 +30,6 @@ $(function() {
                             text: data.exito,
     
                         }).then(function(result) {
-                            //window.location.href = "productoSeleccionado/"+id_producto;
                             location.reload();
                         });
                     }        
@@ -99,17 +67,6 @@ function carrito(){
                 });
             }
             else{
-                // Swal.fire({
-                //     title: 'Dirigiendo a carrito',
-                //     icon: 'success',
-
-                //     text: data.exito,
-
-                // }).then(function(result) {
-                //     //window.location.href = "productoSeleccionado/"+id_producto;
-                //     //location.reload();
-                //     window.location.href = "http://localhost/tienda/public/carrito";
-                // });
                 window.location.href = "http://localhost/tienda/public/carrito";
             }        
         },

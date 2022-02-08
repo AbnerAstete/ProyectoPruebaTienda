@@ -28,14 +28,9 @@
             <td>{{$item->cantidad_productos}}</td>
             <td>{{$item->precio_producto}}</td>
             <td>{{$item->precio_producto * $item->cantidad_productos}}</td>
-            <td>
-            <form id='form-eliminar-producto-carrito' method="GET" class="d-inline">
-              <input name="id_compra" id='id_compra' type="hidden" value={{$item->id_compra}}>
-              {{-- {{method_field('DELETE')}} --}}
-              {{csrf_field()}}
-              <button class="btn btn-danger btn-sm" id="submit-eliminar-producto-carrito" type="submit">Eliminar Producto</button>
-            </form>
-          </td>
+            <td>  
+              <a  onclick="eliminar({{$item->id_compra}})" id="eliminar" type="button" class=" btn btn-danger btn-sm">Eliminar Producto</a>
+            </td>
           </tr>
           <div id="elemento" style="visibility:hidden;">{{$valorTotal += ($item->precio_producto * $item->cantidad_productos)}}</div>
           
