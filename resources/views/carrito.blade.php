@@ -1,5 +1,8 @@
 @extends('plantilla')
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <link rel="stylesheet" href="{{asset('css/carrito.css') }}">
+<script type="text/javascript" src="{{asset('js/carrito.js') }}"> </script>
+
 @section('seccion')
 <h1>Lista de productos Seleccionados:</h1>
 
@@ -11,6 +14,7 @@
         <th scope="col">Talla</th>
         <th scope="col">Cantidad Seleccionada</th>
         <th scope="col">Precio</th>
+        <th scope="col">Precio Total</th>
         <th scope="col">Opciones</th>
       </tr>
     </thead>
@@ -22,12 +26,14 @@
             <td>{{$item->nombre_producto}}</td>
             <td>{{$item->talla_producto}}</td>
             <td>{{$item->cantidad_productos}}</td>
+            <td>{{$item->precio_producto}}</td>
             <td>{{$item->precio_producto * $item->cantidad_productos}}</td>
             <td>
-            <form action="{{URL('eliminarProductoEnCarrito',$item->id_compra)}}" method="POST" class="d-inline">
-              {{method_field('DELETE')}}
+            <form id='form-eliminar-producto-carrito' method="GET" class="d-inline">
+              <input name="id_compra" id='id_compra' type="hidden" value={{$item->id_compra}}>
+              {{-- {{method_field('DELETE')}} --}}
               {{csrf_field()}}
-              <button class="btn btn-danger btn-sm" type="submit">Eliminar Producto</button>
+              <button class="btn btn-danger btn-sm" id="submit-eliminar-producto-carrito" type="submit">Eliminar Producto</button>
             </form>
           </td>
           </tr>
@@ -38,9 +44,10 @@
 </table>
 <label for="">Total: {{$valorTotal }}</label>
 <div>
-    <form action="{{URL('cerrarBoleta',$numeroVoleta)}}" method="POST" class="d-inline">
+    <form id='form-cerrar-boleta' method="POST" class="d-inline">
+      <input name="numero_boleta" id='numero_boleta' type="hidden" value={{$numeroBoleta}}>
       {{csrf_field()}}
-      <button class="btn btn-info btn-sm" type="submit">Pagar</button>
+      <button class="btn btn-info btn-sm" id='submit-cerrar-boleta' type="submit">Pagar</button>
     </form>
 </div>
 <br><a  href="{{URL('productos')}}" type="button" class=" boton-carrito btn btn-dark">Ver mas productos</a>

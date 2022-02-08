@@ -1,14 +1,20 @@
 @extends('plantilla')
+
+{{-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script> --}}
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+
 <link rel="stylesheet" href="{{asset('css/productoSeleccionado.css') }}">
 <script type="text/javascript" src="{{asset('js/productoSeleccionado.js') }}"> </script>
 @section('seccion')
 	
-	<div class="carrito">
+	<div class="carrito"> 
 		@if(Auth::check())
-        	<a  href="{{URL('carrito')}}" type="button" class=" carrito btn btn-dark">Carrito({{count($compraCliente)}})</a>
-    	@else
-        	<a  href="{{URL('/registrar')}}" type="button" class="carrito btn btn-dark">Carrito</a>
-    	@endif
+			<a  onclick="carrito()" id="carrito" type="button" class=" carrito btn btn-dark">Carrito({{count($compraCliente)}})</a>
+		{{-- @else
+			<a  href="{{URL('/registrar')}}" type="button" class="carrito btn btn-dark">Carrito</a> --}}
+		@endif
 	</div>
 	
 	<h1 class="encabezado">PRODUCTO: {{$producto->nombre_producto}}</h1>
@@ -23,21 +29,22 @@
 			Talla: {{$producto->talla_producto}}<br>
 			Stock Disponible: {{$producto->stock_producto}}<br>
 
-			<form   id = "cantidadSeleccionada"  method="post" action="{{URL('agregarAlCarrito')}}">
-				<input name="id_producto" type="hidden" value={{$producto->id_producto}}>
+			<form   id = "cantidadSeleccionada"  method="post" >
+				<input name="id_producto" id='id_producto' type="hidden" value={{$producto->id_producto}}>
 				{{csrf_field()}}
 
 				<label>Cantidad:</label>
 				<div >
-					<input class=" boton-carrito cantidadProducto form-control" type="number" name="cantidad_productos" min="0" max="{{$producto->stock_producto}}" value="0" /><br>
-					
-					
+					<p class="text-danger mb-2 d-none" id="alertCantidad"></p>
+					<input class=" boton-carrito cantidadProducto form-control" id='cantidadProducto' type="number" name="cantidad_productos" min="1" max="{{$producto->stock_producto}}" value="1" /><br>
+				
 					@if(Auth::check())
-						<button  type="submit"  class=" boton-carrito btn btn-dark">Agregar al Carrito</button><br>
+						<button  type="submit" id="cantidadSeleccionada-submit"  class=" boton-carrito btn btn-dark">Agregar al Carrito</button><br>
 					@else
 						<a  href="{{URL('/registrar')}}" type="button" class="boton-carrito btn btn-dark">Agregar al Carrito</a>
 					@endif
 				</div>
+				<div class="alert alert-success mt-2 d-none" id="alertSuccess"></div>
 			</form>
 
 			<br><a  href="{{URL('productos')}}" type="button" class=" boton-carrito btn btn-dark">Ver mas productos</a>

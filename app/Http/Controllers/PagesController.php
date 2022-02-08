@@ -342,13 +342,16 @@ class PagesController extends Controller
             
             if(!$boleta ){
                 $compraCliente=[];
+                //return response()->json(["exito" => 'Producto agregado al carrito ']);
                 return view('productoSeleccionado',compact('producto','compraCliente'));
                 
             }else{
                 $compraCliente = Compra::where("numero_boleta", $boleta->numero_boleta)->get();
+                //return response()->json(["exito" => 'Producto agregado al carrito ']);
                 return view('productoSeleccionado',compact('producto','compraCliente'));
             }
         }else{
+            
             return view('productoSeleccionado',compact('producto'));
         }
     }
@@ -359,7 +362,8 @@ class PagesController extends Controller
         ->first();
         
         if(!$boleta ){
-            return 'Carrito Vacio';
+            return response()->json(["error" => 'Carrito Vacio']);
+            //return 'Carrito Vacio';
             
         }else{
             $valorTotal= 0;
@@ -369,14 +373,14 @@ class PagesController extends Controller
                 ->select('p.imagen','p.nombre_producto','p.talla_producto','c.id_compra','p.precio_producto','c.cantidad_productos')
                 ->get();
 
-            $numeroVoleta=$boleta->numero_boleta;
-            return view('carrito',compact('compraCliente','valorTotal','numeroVoleta'));
+            $numeroBoleta=$boleta->numero_boleta;
+            return view('carrito',compact('compraCliente','valorTotal','numeroBoleta'));
         }
 
     }
     
     public function agregarAlCarrito(Request $request){
-
+        Log::info($request);
         $boleta = Boleta::where("id_persona", Auth::user()->id)
         ->where("visible", true)
         ->first();
@@ -399,7 +403,8 @@ class PagesController extends Controller
             //$productoSeleccionado = $nuevoProductoSeleccionado;
             
             //return ($compraCliente);
-            return back();
+            return response()->json(["exito" => 'Producto agregado al carrito ']);
+            //return back();
             //return view('carrito',compact('productoSeleccionado'));
 
         }else{
@@ -414,7 +419,8 @@ class PagesController extends Controller
             //$productoSeleccionado = $nuevoProductoSeleccionado;
             //$compraCliente = Compra::all()->where("numero_boleta", $boleta->numero_boleta);
             //return ($compraCliente);
-            return back();
+            return response()->json(["exito" => 'Producto agregado al carrito ']);
+            //return back();
             //return view('carrito',compact('compraCliente'));
         }
              
@@ -423,18 +429,32 @@ class PagesController extends Controller
     public function eliminarProductoEnCarrito($id_compra){
         $productoEliminar = App\Compra::findOrFail($id_compra);
         $productoEliminar -> delete();
-        return back();
+        return response()->json(["exito" => 'Producto eliminado del carrito ']);
+        // return back();
     }
 
     public function cerrarBoleta($numero_boleta){
     
         $cerrarBoleta = App\Boleta::findOrFail($numero_boleta);
-        $cerrarBoleta->visible = false;
-        $cerrarBoleta->save();
+        // $cerrarBoleta->visible = false;
+        // $cerrarBoleta->save();
 
         $productos= App\Producto::all();
         $compraCliente=[];
-        return view('tiendaProducto',compact('productos','compraCliente'));
+
+        $compraCliente = Compra::where("compras.numero_boleta", $cerrarBoleta->numero_boleta)->first();
+
+
+        if(!$compraCliente){
+            return response()->json(["error" => 'No tiene productos en carrito']);    
+        }else{
+            $cerrarBoleta->visible = false;
+            $cerrarBoleta->save();
+            return response()->json(["exito" => 'Compra Realizada']);
+        }
+
+        
+        //return view('tiendaProducto',compact('productos','compraCliente'));
         //return view('home');
     }
     

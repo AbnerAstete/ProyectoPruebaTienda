@@ -59,5 +59,5 @@ Route::get('productoSeleccionado/{id_producto}','PagesController@productoSelecci
 Route::get('carrito','PagesController@carrito');
 Route::post('agregarAlCarrito','PagesController@agregarAlCarrito');
 Route::get('ingresoRequerido','PagesController@ingresoRequerido');
-Route::delete('eliminarProductoEnCarrito/{id_compra}','PagesController@eliminarProductoEnCarrito');
+Route::get('eliminarProductoEnCarrito/{id_compra}','PagesController@eliminarProductoEnCarrito');
 Route::post('cerrarBoleta/{numero_boleta}','PagesController@cerrarBoleta');
