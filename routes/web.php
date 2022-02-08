@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,6 +26,7 @@ Route::get('/registrar','PagesController@login');
 Route::post('/registrar', 'PagesController@registrar');
 
 
+
 // Usuario Ingresado
 
 Route::group(['prefix' => 'ingresado','middleware'=>'ingresado'],function(){
@@ -44,11 +44,27 @@ Route::delete('eliminarUsuarios/{id}','PagesController@eliminarUsuarios');
 Route::get('vistaProducto','PagesController@producto');
 Route::post('agregarProducto','PagesController@agregarProducto');
 Route::get('mostrarProducto','PagesController@mostrarProducto');
-Route::get('editarProducto/{id_producto}','PagesController@editarProducto');
+Route::get('editarProducto/{id_categoria_producto}','PagesController@editarProducto');
 Route::post('updateProductos','PagesController@updateProductos');
-Route::delete('eliminarProducto/{id_producto}','PagesController@eliminarProducto');
+Route::get('eliminarProducto/{id_producto}','PagesController@eliminarProducto');
+Route::get('habilitarProducto/{id_producto}','PagesController@habilitarProducto');
+Route::get('deshabilitarProducto/{id_producto}','PagesController@deshabilitarProducto');
 
+//Pruebas
+Route::get('/pruebas','PagesController@pruebas');
+//----- Crud Categorias
+
+Route::get('mostrarCategorias','PagesController@mostrarCategorias');
+Route::get('vistaCategorias','PagesController@Categorias');
+Route::post('agregarCategorias','PagesController@agregarCategorias')->name("agregarCategorias");
+//Route::get('editarProducto/{id_producto}','PagesController@editarProducto');
+
+Route::get('editarCategoria/{id_categoria}','PagesController@editarCategoria');
+Route::post('updateCategorias','PagesController@updateCategorias');
+Route::put('eliminarCategoria/{id_categoria}','PagesController@eliminarCategoria');
 
 
 // Route::get('ingresado/noaccess','PagesController@noaccess')->middleware('ingresado');
 // Route::get('ingresado/logout', 'PagesController@logout')->middleware('ingresado');
+
+

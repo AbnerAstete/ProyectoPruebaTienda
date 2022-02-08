@@ -143,10 +143,10 @@ $(function() {
                         
                     }
     
-                    if(data.error){
+                    if(data.errores){
 
                         var erroHtml = '<div class="alert alert-danger" style="text-align: left"><ul>';
-                        var errores = data.error;
+                        var errores = data.errores;
         
                         errores.forEach(function(valor, id) {
                             erroHtml += '<li>'+valor+'</li>';

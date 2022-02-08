@@ -13,6 +13,10 @@ use Auth;
 use Log;
 use Session;
 use DB;
+use App\Categoria;
+use Carbon\Carbon;
+use Illuminate\Pagination\Paginator;
+
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Supoort\Facades\BD;
@@ -35,7 +39,8 @@ class PagesController extends Controller
     }
 
     public function producto(){
-        return view('agregarProductos');
+        $categorias = Categoria::all();
+        return view('agregarProductos',compact('categorias'));
     }
 
     public function noaccess(){
@@ -144,7 +149,6 @@ class PagesController extends Controller
 
     public function agregarProducto(Request $request){
         Log::info($request);
-        Log::info('ola');
 
         try {
             $validador=Validator::make($request->all(),
@@ -178,7 +182,10 @@ class PagesController extends Controller
             $nuevoProducto->precio_producto=$request->precio_producto;
             $nuevoProducto->stock_producto=$request->stock_producto;
             $nuevoProducto->descripcion=$request->descripcion_producto;
-            
+            $nuevoProducto->fecha_creacion=Carbon::now()->format('Y-m-d H:i:s');
+            $nuevoProducto->fecha_modificacion=Carbon::make(null);
+            $nuevoProducto->tipo_modificacion=null;
+            $nuevoProducto->visible=TRUE;
 
             Log::info($request->ruta);
             if($request->hasFile('ruta')){
@@ -198,14 +205,28 @@ class PagesController extends Controller
             }
             
             $nuevoProducto->save();
+            $categorias = $request->categorias;
+            Log::info($categorias);
+            Log::info('aca categorias');
 
+            Log::info(Carbon::now()->format('Y-m-d H:i:s'));
+            if($categorias){
+            foreach ($categorias as $key => $categoria) {
 
-            //$nuevoProducto->ruta=$request->file('ruta');
+                $categorias_producto =  new App\categoria_producto;
+                $categorias_producto->id_producto=$nuevoProducto->id_producto;
+                $categorias_producto->id_categoria=$categoria;
+                $categorias_producto->fecha_creacion=Carbon::now()->format('Y-m-d H:i:s');
+                $categorias_producto->fecha_modificacion=Carbon::make(null);
+                $categorias_producto->tipo_modificacion=null;
+                $categorias_producto->visible=TRUE;
+                //Log::info($categoria);
+                $categorias_producto->save();
 
-            Log::info($request->file('ruta'));
-            Log::info($request);
-            $nuevoProducto->save();
-            //return back()->with('mensaje','exitoso');
+            }
+
+        }
+
             return response()->json(["exito" => true]);
         }catch (\Throwable $th){
             Log::info($th);
@@ -214,20 +235,38 @@ class PagesController extends Controller
         
     }
 
-    public function mostrarProducto(Request $request){
-        $productos= App\Producto::all();
-        return view('mostrarProductos',compact('productos'));
+    public static  function mostrarProducto(Request $request){
+
+        // $publishedArticles = Article::paginate(10, ['*'], 'published');
+        // $unpublishedArticles = Article::paginate(10, ['*'], 'unpublished');
+       
+        $productosDisponibles= App\Producto::where("visible",true)
+        ->where("disponibilidad_producto",True)
+        ->where("stock_producto",">=",0)->paginate(2, ['*'], 'productosDisponibles');
+        // $productosDisponibles->setPageName('productosDisponibles');
+
+        $productosnoDisponibles= App\Producto::where("visible",true)
+        ->where("disponibilidad_producto",false)
+       ->paginate(2, ['*'], 'productosnoDisponibles');
+        // $productosnoDisponibles->setPageName('productosnoDisponibles');
+
+        $productosEliminados= App\Producto::where("visible",false)->paginate(4, ['*'], 'productosEliminados');
+        // $productosEliminados->setPageName('productosEliminados');
+
+        return view('mostrarProductos')->with(['productosDisponibles'=>$productosDisponibles,'productosnoDisponibles'=>$productosnoDisponibles,'productosEliminados'=>$productosEliminados]);
     }
 
     public function editarProducto($id_producto){
         $producto = App\Producto::findOrFail($id_producto);
-        return view('updateProductos', compact('producto'));
+        $categorias = App\Categoria::where("visible",true)->get();
+        
+        return view('updateProductos', compact('producto','categorias'));
     }
 
 
     public function updateProductos(Request $request){
+
         try {
-            Log::info($request);
             $validador=Validator::make($request->all(),
             [
                 'nombre_producto' => 'required',
@@ -252,8 +291,6 @@ class PagesController extends Controller
                 //return back()->withErrors($validador);
             }
                 
-                Log::info($request);
-                Log::info($request->disponibilidad_producto);
                 $productoUpdate = App\Producto::findOrFail($request->id_productox);
                 $productoUpdate->nombre_producto=$request->nombre_producto;
                 $productoUpdate->talla_producto=$request->talla_producto;
@@ -265,7 +302,6 @@ class PagesController extends Controller
                 //$character= Producto::find($id_producto); //buscas el registro por id.
                 $ImageToDelete = $productoUpdate->imagen; //asignas el nombre del archivo guardado.
                 //eliminas el archivo de la ruta.
-                Log::info($ImageToDelete );
                 //Log::info($productoUpdate->imagen );
                 if($request->hasFile('ruta')){
                     $archivo = $request->file('ruta');
@@ -275,36 +311,228 @@ class PagesController extends Controller
 
                     $file_path = public_path().'/imagenes/'.$ImageToDelete; //agregas el nombre del archivo a la ruta donde esta guardado.
                     \File::delete($file_path);
-                //     $archivo->imagen=$request->imagen;
-                //     $archivo = $request->file('ruta');
-                //     $productoUpdate->imagen=$archivo;
-                //     //$nombre=time().$archivo->getClien;tOriginalName();
-                //     $archivo->move(public_path().'/imagenes/',  $archivo);
-                //     $nuevoProducto->imagen = $archivo;
-
-                //$request->file('ruta')->store('public/imagenes');
                 $productoUpdate->imagen = $nombre;
-                Log::info($productoUpdate );
 
             }
+            
 
                 $productoUpdate->save();
+                
+                $categorias = $request->categorias;
+                // $categoriasdelproducto = $productoUpdate->categorias->where('visible',True)->with('id_categoria')->get()->toArray();
+                $categoriasdelproducto= $productoUpdate->categorias->where('visible',True)->pluck('id_categoria');
+                // Log::info($categorias);
+
+                // Log::info($categoriasdelproducto->toArray());
+                // Log::info($request->get('categorias'));
+                // $productoUpdate->categorias()->sync($request->get('categorias'));
+                 $productoUpdate->categorias()->sync($categorias);
+
+                    // foreach ($categorias as $key => $categoria) {
+                    //     // $catp = array_search($categoria, $categoriasdelproducto); // $clave = 2;
+                    //    $cat = in_array($categoria, $categoriasdelproducto->toArray());
+                    //    if(!$cat ){
+                        
+
+                    //    }
+                    //    Log::info($cat);
+                    //    Log::info($catp);
+                    // }
+
+
+                    // $categorias_productoUpdate =  App\Producto::findOrFail($id_categoria_producto);
+                    // $categorias_productoUpdate->id_producto=$request->id_producto;
+                    // $categorias_productoUpdate->id_categoria=$request->id_categoria;
+                    // $categorias_productoUpdate->fecha_modificacion=Carbon::now()->format('Y-m-d H:i:s');
+                    // $categorias_productoUpdate->tipo_modificacion='Editado';
+                    // $categorias_productoUpdate->visible=TRUE;
+                    // Log::info($categoria);
+                    // Log::info($categorias);
+                    // $categorias_productoUpdate->save();
+                    // Log::info($id_categoriax);
+
+        //           if($categorias){
+        //     foreach ($categorias as $key => $categoria) {
+
+        //         $categorias_producto =  new App\categoria_producto;
+        //         $categorias_producto->id_producto=$nuevoProducto->id_producto;
+        //         $categorias_producto->id_categoria=$categoria;
+        //         $categorias_producto->fecha_creacion=Carbon::now()->format('Y-m-d H:i:s');
+        //         $categorias_producto->fecha_modificacion=Carbon::make(null);
+        //         $categorias_producto->tipo_modificacion=null;
+        //         $categorias_producto->visible=TRUE;
+        //         //Log::info($categoria);
+        //         $categorias_producto->save();
+
+        //     }
+
+        // }
+
+                
+    
+            
+                
                 return response()->json(["exito" => true]);
 
                 //return back()->with('mensaje','Producto actualizado');
+                
+            }
+            catch (\Throwable $th){
+                Log::info($th);
+                return response()->json(['error'=>$th]);
+             }
+
+
+    }
+
+    public function eliminarProducto($id_producto){
+        Log::info($id_producto);
+        
+        $productoEliminar = App\Producto::find($id_producto);
+        //$productoEliminar -> delete();
+        if ($productoEliminar){
+        $productoEliminar->fecha_modificacion=Carbon::now()->format('Y-m-d H:i:s');
+        $productoEliminar->tipo_modificacion='Eliminado';
+        $productoEliminar->visible=false;
+        $productoEliminar->save();
+        return response()->json(["exito" => 'Producto Eliminado']);
+        }
+        else{
+         return response()->json(['error'=>'Error al eliminar producto']);
+        }
+    }
+    public function habilitarProducto($id_producto){
+        $habilitarProducto = App\Producto::findOrFail($id_producto);
+        //$productoEliminar -> delete();
+        $habilitarProducto -> disponibilidad_producto =True;  
+        $habilitarProducto->fecha_modificacion=Carbon::now()->format('Y-m-d H:i:s');
+        $habilitarProducto->tipo_modificacion=null;
+        $habilitarProducto->visible=True;
+
+        $habilitarProducto->save();
+        return back()->with('mensaje','Producto habilitado');
+    }
+    public function deshabilitarProducto($id_producto){
+        $deshabilitarProducto = App\Producto::findOrFail($id_producto);
+        $deshabilitarProducto -> disponibilidad_producto =False;  
+        $deshabilitarProducto->fecha_modificacion=Carbon::now()->format('Y-m-d H:i:s');
+        $deshabilitarProducto->tipo_modificacion=null;
+        $deshabilitarProducto->visible=True;
+
+        $deshabilitarProducto->save();
+        return back()->with('mensaje','Producto deshabilitado');
+    }
+    public function mostrarCategorias(Request $request){
+        $categorias= App\Categoria::all();
+        return view('mostrarCategorias',compact('categorias'));
+    }
+    public function Categorias(){
+        return view('agregarCategorias');   
+     }
+
+
+
+    public function agregarCategorias(Request $request){   
+        Log::info($request);
+        try {
+            $validador=Validator::make($request->all(),
+        
+                [
+                    'nombre_categoria' => 'required',
+                 
+                ],
+                [
+                    'nombre_categoria.required'=>'El nombre es requerido',
+                ]
+            );
+            if ($validador->fails()){
+                //retorna los errores
+                return response()->json(['errores'=>$validador->errors()->all()]);
+                //return  back()->withErrors($validador);
+            }
+            $nuevaCategoria= new App\Categoria;
+            $nuevaCategoria->nombre_categoria=$request->nombre_categoria;
+            $nuevaCategoria->fecha_creacion=Carbon::now()->format('Y-m-d H:i:s');
+            $nuevaCategoria->fecha_modificacion=Carbon::make(null);
+            $nuevaCategoria->tipo_modificacion=null;
+            $nuevaCategoria->visible=TRUE;
+
+            $nuevaCategoria->save();
+
+            return response()->json(["exito" => true]);
+        }catch (\Throwable $th){
+            Log::info($th);
+            return response()->json(['error'=>$th]);
+        }
+    }      
+    
+    public function editarCategoria($id_categoria){
+        $categoria = App\Categoria::findOrFail($id_categoria);
+        return view('updateCategorias', compact('categoria'));
+    }
+
+
+
+
+     public function updateCategorias(Request $request){
+        try {
+            Log::info($request);
+            $validador=Validator::make($request->all(),
+            [
+                'nombre_categoria' => 'required'
+            ],
+            [
+                'nombre_categoria.required'=>'El nombre es requerido',
+                ]
+            );
+            if ($validador->fails()){
+                //retorna los errores
+                return response()->json(['errores'=>$validador->errors()->all()]);
+                //return back()->withErrors($validador);
+            }
+                $categoriaUpdate = App\Categoria::findOrFail($request->id_categoriax);
+                $categoriaUpdate->fecha_modificacion=Carbon::now()->format('Y-m-d H:i:s');
+                $categoriaUpdate->tipo_modificacion='Editado';
+                $categoriaUpdate->visible=FALSE;
+                $categoriaUpdate->save();
+                
+                $nuevaCategoria= new App\Categoria;
+                $nuevaCategoria->nombre_categoria=$request->nombre_categoria;
+                $nuevaCategoria->fecha_creacion= $categoriaUpdate->fecha_creacion;
+                $nuevaCategoria->fecha_modificacion=null;
+                $nuevaCategoria->tipo_modificacion=null;
+                $nuevaCategoria->visible=TRUE;
+    
+                $nuevaCategoria->save();
+    
+                return response()->json(["exito" => true]);
             }catch (\Throwable $th){
                 Log::info($th);
                 return response()->json(['error'=>$th]);
              }
     }
+    
+    public function eliminarCategoria($id_categoria){
+        $categoriaEliminar = App\Categoria::findOrFail($id_categoria);
+        //$productoEliminar -> delete();
+        $categoriaEliminar->fecha_modificacion=Carbon::now()->format('Y-m-d H:i:s');
+        $categoriaEliminar->tipo_modificacion='Eliminado';
+        $categoriaEliminar->visible=false;
 
-    public function eliminarProducto($id_producto){
-        $productoEliminar = App\Producto::findOrFail($id_producto);
-        $productoEliminar -> delete();
+        $categoriaEliminar->save();
         return back()->with('mensaje','Producto Eliminado');
     }
+    public function pruebas(){
+        
+        
+        
+    // $productos = Producto::all();
+    // //$categorias = Categoria::all();
+    // //return $productos->categorias;
+    // //return $categorias;
 
-
+    return view('pruebas');
+    }
 
 
     // }
