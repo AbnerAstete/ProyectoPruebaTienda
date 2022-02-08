@@ -69,7 +69,7 @@ class Persona extends Model implements Authenticatable
     public function tipoUsuario(){ 
         return $this->belongsTo('App\Tipo_usuario','id_tipo_usuario'); 
     }
-
+   
 
 
 }

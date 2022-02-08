@@ -1,0 +1,28 @@
+body {
+    padding-top: 40px;
+  }
+  .encabezado{
+    text-align: center;
+  }
+  .show-cart li {
+    display: flex;
+    
+  }
+  .card {
+    
+    margin-bottom: 30px;
+    text-align: center;
+    
+  }
+  .card-img-top {
+    height: 350px;
+    align-self: center;
+    
+  }
+  .card-block{
+    padding-top: 50px;
+  }
+  
+  .carrito{
+    float: right;
+}

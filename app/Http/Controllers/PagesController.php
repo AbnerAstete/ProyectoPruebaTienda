@@ -8,7 +8,8 @@ use App\Http\Requests\ValidacionRegistro;
 use App\Http\Requests\ValidacionIngresar;
 use App\Http\Requests\ValidacionProducto;
 use App\Persona;
-use App\Producto;
+use App\Compra;
+use App\Boleta;
 use Auth;
 use Log;
 use Session;
@@ -36,6 +37,10 @@ class PagesController extends Controller
         log::info('logout');
         Auth::logout();
         return view('home');
+    }
+
+    public function ingresoRequerido(Request $request){
+        return 'Ingreso Requerido';
     }
 
     public function producto(){
@@ -142,9 +147,7 @@ class PagesController extends Controller
 
     }
 
-    public function tiendaProducto(Request $request){
-        return view('tienda');
-    }
+    
 
 
     public function agregarProducto(Request $request){
@@ -524,17 +527,139 @@ class PagesController extends Controller
     }
     public function pruebas(){
         
-        
-        
-    // $productos = Producto::all();
-    // //$categorias = Categoria::all();
-    // //return $productos->categorias;
-    // //return $categorias;
+        return view('pruebas');
+    }
 
-    return view('pruebas');
+    public function tiendaProducto(Request $request){
+        $productos= App\Producto::all();
+        if(Auth::check()){
+            
+            $boleta = Boleta::where("id_persona", Auth::user()->id)
+            ->where("visible", true)
+            ->first();
+            
+            if(!$boleta ){
+                $compraCliente=[];
+                return view('tiendaProducto',compact('productos','compraCliente'));
+                
+            }else{
+                $compraCliente = Compra::where("numero_boleta", $boleta->numero_boleta)->get();
+                return view('tiendaProducto',compact('productos','compraCliente'));
+            }
+        }else{
+            return view('tiendaProducto',compact('productos'));
+        }
+        
     }
 
 
+    public function productoSeleccionado($id_producto){
+        $producto = App\Producto::findOrFail($id_producto);
+
+        if(Auth::check()){
+            $boleta = Boleta::where("id_persona", Auth::user()->id)
+            ->where("visible", true)
+            ->first();
+
+            
+            if(!$boleta ){
+                $compraCliente=[];
+                return view('productoSeleccionado',compact('producto','compraCliente'));
+                
+            }else{
+                $compraCliente = Compra::where("numero_boleta", $boleta->numero_boleta)->get();
+                return view('productoSeleccionado',compact('producto','compraCliente'));
+            }
+        }else{
+            return view('productoSeleccionado',compact('producto'));
+        }
+    }
+
+    public function carrito(Request $request){
+        $boleta = Boleta::where("id_persona", Auth::user()->id)
+        ->where("visible", true)
+        ->first();
+        
+        if(!$boleta ){
+            return 'Carrito Vacio';
+            
+        }else{
+            $valorTotal= 0;
+            $compraCliente = Boleta::where("boletas.numero_boleta", $boleta->numero_boleta)
+                ->join('compras as c','c.numero_boleta','=','boletas.numero_boleta')
+                ->join('productos as p','p.id_producto','=','c.id_producto')
+                ->select('p.imagen','p.nombre_producto','p.talla_producto','c.id_compra','p.precio_producto','c.cantidad_productos')
+                ->get();
+
+            $numeroVoleta=$boleta->numero_boleta;
+            return view('carrito',compact('compraCliente','valorTotal','numeroVoleta'));
+        }
+
+    }
+    
+    public function agregarAlCarrito(Request $request){
+
+        $boleta = Boleta::where("id_persona", Auth::user()->id)
+        ->where("visible", true)
+        ->first();
+
+        if(!$boleta){
+            
+
+            $nuevaBoleta= new App\Boleta;         
+            $nuevaBoleta->id_persona = Auth::user()->id;
+            $nuevaBoleta->visible = true;
+            $nuevaBoleta->save();
+
+            $nuevoProductoSeleccionado= new App\Compra;
+            $nuevoProductoSeleccionado->cantidad_productos = $request->cantidad_productos;
+            $nuevoProductoSeleccionado->id_producto = $request->id_producto;
+            $nuevoProductoSeleccionado->numero_boleta = $nuevaBoleta->numero_boleta;
+
+            $nuevoProductoSeleccionado->save();
+
+            //$productoSeleccionado = $nuevoProductoSeleccionado;
+            
+            //return ($compraCliente);
+            return back();
+            //return view('carrito',compact('productoSeleccionado'));
+
+        }else{
+
+            $nuevoProductoSeleccionado= new App\Compra;
+            $nuevoProductoSeleccionado->cantidad_productos = $request->cantidad_productos;
+            $nuevoProductoSeleccionado->id_producto = $request->id_producto;
+            $nuevoProductoSeleccionado->numero_boleta = $boleta->numero_boleta;
+
+            $nuevoProductoSeleccionado->save();
+
+            //$productoSeleccionado = $nuevoProductoSeleccionado;
+            //$compraCliente = Compra::all()->where("numero_boleta", $boleta->numero_boleta);
+            //return ($compraCliente);
+            return back();
+            //return view('carrito',compact('compraCliente'));
+        }
+             
+    }
+
+    public function eliminarProductoEnCarrito($id_compra){
+        $productoEliminar = App\Compra::findOrFail($id_compra);
+        $productoEliminar -> delete();
+        return back();
+    }
+
+    public function cerrarBoleta($numero_boleta){
+    
+        $cerrarBoleta = App\Boleta::findOrFail($numero_boleta);
+        $cerrarBoleta->visible = false;
+        $cerrarBoleta->save();
+
+        $productos= App\Producto::all();
+        $compraCliente=[];
+        return view('tiendaProducto',compact('productos','compraCliente'));
+        //return view('home');
+    }
+    
     // }
 
 
