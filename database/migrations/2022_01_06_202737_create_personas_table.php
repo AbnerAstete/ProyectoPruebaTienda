@@ -22,7 +22,12 @@ class CreatePersonasTable extends Migration
             $table->string('correo');
             $table->string('contrasena');
             $table->boolean('ingresado')->default(false);
-         
+            //$table->string('remember_token',100);
+            $table->rememberToken();
+            $table->integer('id_tipo_usuario')->unsigned()->default(1);
+    
+            // Updating relationships
+            $table->foreign('id_tipo_usuario')->references('id_tipo_usuario')->on('tipo_usuarios')->onDelete('cascade');
         });
     }
         /**
@@ -33,5 +38,6 @@ class CreatePersonasTable extends Migration
     public function down()
     {
         Schema::dropIfExists('personas');
+        Schema::dropIfExists('id_tipo_usuario');
     }
 }

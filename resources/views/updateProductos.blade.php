@@ -10,7 +10,7 @@
 <br><a href="{{URL('mostrarProducto')}}"><input type="button" value="Ver Lista Productos"></a><br>
     
 
-	<h1>Editar Producto</h1><h5>Id: {{$producto->id_producto}}</h5> <br>
+	<h1 class="text-center">Editar Producto</h1><br>
 
 
 <div class="container" >
@@ -61,7 +61,15 @@
 				<input type="file" name="ruta" id="file" placeholder="Imagen"  onchange = 'previewImage(this)' class="form-control mb-2"/> <br>
 				{{-- <img id="blah" src="https://via.placeholder.com/150" alt="Tu imagen"  /> --}}
 
-	
+				@foreach ($categorias as $item)
+						
+					
+           				 <td><input type="checkbox" id="categorias" name="categorias[]"   value="{{$item->id_categoria}}" {{ $producto->categorias->contains($item) ? 'checked' : '' }}>{{$item->nombre_categoria}}</td>
+
+
+							{{-- <input type="checkbox"  value="{{$item->id_categoria}}">{{$item->nombre_categoria}} --}}
+			   @endforeach
+			 
 	
 				<button class="btn btn-warning btn-block" type="submit" id = "editar-submit">Editar</button>
 				<div class="alert alert-succes my2 d-none" id ="alertSuccess"></div>
