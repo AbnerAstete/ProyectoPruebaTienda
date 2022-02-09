@@ -661,48 +661,43 @@ class PagesController extends Controller
     
         $cerrarBoleta = App\Boleta::findOrFail($numero_boleta);
 
-        $productos= App\Producto::all();
+        //$productos= App\Producto::all();
         
         //$compraCliente=[];
-        $compraCliente = Compra::where("numero_boleta","=", $cerrarBoleta->numero_boleta)->first();
-
+        $compraCliente = Compra::where("numero_boleta","=", $cerrarBoleta->numero_boleta)->get();
+        Log::info($compraCliente->toArray());
         
-
-        // if(!$compraCliente){
-        //     return response()->json(["error" => 'No tiene productos en carrito']);    
-        // }else{
-
-        //     $cerrarBoleta->visible = false;
-        //     $cerrarBoleta->save();
-        //     return response()->json(["exito" => 'Compra Realizada']);
-        // }
-
         if(!$compraCliente){
             return response()->json(["error" => 'No tiene productos en carrito']);    
         }else{
 
-            $productoSeleccionado= Producto::where("id_producto","=", $compraCliente->id_producto)->first();
-
-            $productoSeleccionado->stock_producto = $productoSeleccionado->stock_producto - ($compraCliente->cantidad_productos);
             
-            if($productoSeleccionado->stock_producto >= 0){
-        
-                $productoSeleccionado->save();
-        
-                $compraCliente->cantidad_productos;
-                $cerrarBoleta->visible = false;
-                $cerrarBoleta->save();
-
-                return response()->json(["exito" => 'Compra Realizada']);
-            }else{
-                return response()->json(["errorCantidad" => 'La compra realizada excede el stock']);              
+            
+            foreach ($compraCliente as $compra) {
+                $productoSeleccionado= Producto::where("productos.id_producto","=", $compra->id_producto)->first();
+                Log::info($productoSeleccionado);
+                 $productoSeleccionado->stock_producto = $productoSeleccionado->stock_producto - ($compra->cantidad_productos);
+            
+                if($productoSeleccionado->stock_producto >= 0){
+            
+                    $productoSeleccionado->save();
+                    $cerrarBoleta->visible = false;
+                    $cerrarBoleta->save();
+                    
+                }else{
+                    return response()->json(["errorCantidad" => 'La compra realizada excede el stock']);              
+                }     
             }
-            
+            return response()->json(["exito" => 'Compra Realizada']);
+               
+
+        
+
         }
+    
+        
 
     }
-    
+
     // }
-
-
 }
