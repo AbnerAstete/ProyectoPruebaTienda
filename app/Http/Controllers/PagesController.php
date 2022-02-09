@@ -9,6 +9,7 @@ use App\Http\Requests\ValidacionIngresar;
 use App\Http\Requests\ValidacionProducto;
 use App\Persona;
 use App\Compra;
+use App\Producto;
 use App\Boleta;
 use Auth;
 use Log;
@@ -397,6 +398,7 @@ class PagesController extends Controller
         $productoEliminar->fecha_modificacion=Carbon::now()->format('Y-m-d H:i:s');
         $productoEliminar->tipo_modificacion='Eliminado';
         $productoEliminar->visible=false;
+        $productoEliminar->disponibilidad_producto=false;
         $productoEliminar->save();
         return response()->json(["exito" => 'Producto Eliminado']);
         }
@@ -658,26 +660,46 @@ class PagesController extends Controller
     public function cerrarBoleta($numero_boleta){
     
         $cerrarBoleta = App\Boleta::findOrFail($numero_boleta);
-        // $cerrarBoleta->visible = false;
-        // $cerrarBoleta->save();
 
         $productos= App\Producto::all();
-        $compraCliente=[];
+        
+        //$compraCliente=[];
+        $compraCliente = Compra::where("numero_boleta","=", $cerrarBoleta->numero_boleta)->first();
 
-        $compraCliente = Compra::where("compras.numero_boleta", $cerrarBoleta->numero_boleta)->first();
+        
 
+        // if(!$compraCliente){
+        //     return response()->json(["error" => 'No tiene productos en carrito']);    
+        // }else{
+
+        //     $cerrarBoleta->visible = false;
+        //     $cerrarBoleta->save();
+        //     return response()->json(["exito" => 'Compra Realizada']);
+        // }
 
         if(!$compraCliente){
             return response()->json(["error" => 'No tiene productos en carrito']);    
         }else{
-            $cerrarBoleta->visible = false;
-            $cerrarBoleta->save();
-            return response()->json(["exito" => 'Compra Realizada']);
+
+            $productoSeleccionado= Producto::where("id_producto","=", $compraCliente->id_producto)->first();
+
+            $productoSeleccionado->stock_producto = $productoSeleccionado->stock_producto - ($compraCliente->cantidad_productos);
+            
+            if($productoSeleccionado->stock_producto >= 0){
+        
+                $productoSeleccionado->save();
+        
+                $compraCliente->cantidad_productos;
+                $cerrarBoleta->visible = false;
+                $cerrarBoleta->save();
+
+                return response()->json(["exito" => 'Compra Realizada']);
+            }else{
+                return response()->json(["errorCantidad" => 'La compra realizada excede el stock']);              
+            }
+            
         }
 
-        
-        //return view('tiendaProducto',compact('productos','compraCliente'));
-        //return view('home');
     }
     
     // }

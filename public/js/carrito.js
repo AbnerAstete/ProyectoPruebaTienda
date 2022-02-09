@@ -7,7 +7,6 @@ $(function() {
         
         formularioCerrarBoleta.addEventListener("submit", (e)=>{
             e.preventDefault();
-            console.log("HOLA")
             
 
             Swal.fire({
@@ -32,6 +31,18 @@ $(function() {
                             },
                             success: function(data) {
                                 console.log(data);
+
+                                if(data.errorCantidad){
+                                    Swal.fire({
+                                        title: 'Error',
+                                        icon: 'info',
+            
+                                        text: data.errorCantidad,
+                
+                                    }).then(function(result) {
+                                        location.reload();
+                                    });
+                                } 
 
                                 if(data.error){
                                     Swal.fire({
@@ -70,7 +81,7 @@ $(function() {
 
 function eliminar(id_compra){
     Swal.fire({
-        title: '¿Desea realizar la compra?',
+        title: '¿Desea quitar este producto?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
