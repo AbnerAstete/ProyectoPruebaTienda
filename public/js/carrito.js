@@ -32,10 +32,22 @@ $(function() {
                             success: function(data) {
                                 console.log(data);
 
+                                if(data.error){
+                                    Swal.fire({
+                                        title: 'Error',
+                                        icon: 'error',
+            
+                                        text: data.error,
+                
+                                    }).then(function(result) {
+                                        window.location.href = "productos";
+                                    });
+                                } 
+
                                 if(data.errorCantidad){
                                     Swal.fire({
                                         title: 'Error',
-                                        icon: 'info',
+                                        icon: 'error',
             
                                         text: data.errorCantidad,
                 
@@ -44,18 +56,6 @@ $(function() {
                                     });
                                 } 
 
-                                if(data.error){
-                                    Swal.fire({
-                                        title: 'Error',
-                                        icon: 'info',
-            
-                                        text: data.error,
-                
-                                    }).then(function(result) {
-                                        window.location.href = "productos";
-                                    });
-                                }        
-                
                                 if(data.exito){
                                     Swal.fire({
                                         title: 'Exito',

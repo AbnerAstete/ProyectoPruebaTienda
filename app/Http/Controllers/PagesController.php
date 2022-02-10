@@ -15,6 +15,7 @@ use Auth;
 use Log;
 use Session;
 use DB;
+use Exception;
 use App\Categoria;
 use Carbon\Carbon;
 use Illuminate\Pagination\Paginator;
@@ -667,12 +668,12 @@ class PagesController extends Controller
         $compraCliente = Compra::where("numero_boleta","=", $cerrarBoleta->numero_boleta)->get();
         Log::info($compraCliente->toArray());
         
-        if(!$compraCliente){
+        if(count($compraCliente) <= 0){
             return response()->json(["error" => 'No tiene productos en carrito']);    
         }else{
 
             
-            
+            DB::beginTransaction();
             foreach ($compraCliente as $compra) {
                 $productoSeleccionado= Producto::where("productos.id_producto","=", $compra->id_producto)->first();
                 Log::info($productoSeleccionado);
@@ -683,12 +684,15 @@ class PagesController extends Controller
                     $productoSeleccionado->save();
                     $cerrarBoleta->visible = false;
                     $cerrarBoleta->save();
-                    
+                        
                 }else{
+                    DB::rollBack();
                     return response()->json(["errorCantidad" => 'La compra realizada excede el stock']);              
                 }     
             }
+            DB::commit();
             return response()->json(["exito" => 'Compra Realizada']);
+            
                
 
         
