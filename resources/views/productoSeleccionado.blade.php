@@ -31,12 +31,13 @@
 
 			<form   id = "cantidadSeleccionada"  method="post" >
 				<input name="id_producto" id='id_producto' type="hidden" value={{$producto->id_producto}}>
+				<input name="stock_producto" id='stock_producto' type="hidden" value={{$producto->stock_producto}}>
 				{{csrf_field()}}
 
 				<label>Cantidad:</label>
 				<div >
 					<p class="text-danger mb-2 d-none" id="alertCantidad"></p>
-					<input class=" boton-carrito cantidadProducto form-control" id='cantidadProducto' type="number" name="cantidad_productos" min="1" max="{{$producto->stock_producto}}" value="1" /><br>
+					<input class=" boton-carrito cantidadProducto form-control" id='cantidadProducto' type="number" name="cantidad_productos"  value="1" /><br>
 				
 					@if(Auth::check())
 						<button  type="submit" id="cantidadSeleccionada-submit"  class=" boton-carrito btn btn-dark">Agregar al Carrito</button><br>

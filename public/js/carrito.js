@@ -7,7 +7,6 @@ $(function() {
         
         formularioCerrarBoleta.addEventListener("submit", (e)=>{
             e.preventDefault();
-            console.log("HOLA")
             
 
             Swal.fire({
@@ -36,15 +35,27 @@ $(function() {
                                 if(data.error){
                                     Swal.fire({
                                         title: 'Error',
-                                        icon: 'info',
+                                        icon: 'error',
             
                                         text: data.error,
                 
                                     }).then(function(result) {
                                         window.location.href = "productos";
                                     });
-                                }        
+                                } 
+
+                                if(data.errorCantidad){
+                                    Swal.fire({
+                                        title: 'Error',
+                                        icon: 'error',
+            
+                                        text: data.errorCantidad,
                 
+                                    }).then(function(result) {
+                                        location.reload();
+                                    });
+                                } 
+
                                 if(data.exito){
                                     Swal.fire({
                                         title: 'Exito',
@@ -70,7 +81,7 @@ $(function() {
 
 function eliminar(id_compra){
     Swal.fire({
-        title: '¿Desea realizar la compra?',
+        title: '¿Desea quitar este producto?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
