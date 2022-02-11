@@ -605,14 +605,25 @@ class PagesController extends Controller
     }
     
     public function agregarAlCarrito(Request $request){
+        
+
         Log::info($request);
         $boleta = Boleta::where("id_persona", Auth::user()->id)
         ->where("visible", true)
         ->first();
+        
+        $cantidad_seleccionada = $request->cantidad_productos;
+        $stock_producto = $request->stock_producto;
+        Log::info($cantidad_seleccionada);
+        Log::info($stock_producto);
+
+        if ($cantidad_seleccionada <= 0 or $cantidad_seleccionada > $stock_producto ){
+            return response()->json(['error'=>'Ingrese una cantidad de productos valida.']);
+        }
+
 
         if(!$boleta){
             
-
             $nuevaBoleta= new App\Boleta;         
             $nuevaBoleta->id_persona = Auth::user()->id;
             $nuevaBoleta->visible = true;
@@ -622,31 +633,18 @@ class PagesController extends Controller
             $nuevoProductoSeleccionado->cantidad_productos = $request->cantidad_productos;
             $nuevoProductoSeleccionado->id_producto = $request->id_producto;
             $nuevoProductoSeleccionado->numero_boleta = $nuevaBoleta->numero_boleta;
-
             $nuevoProductoSeleccionado->save();
 
-            //$productoSeleccionado = $nuevoProductoSeleccionado;
-            
-            //return ($compraCliente);
             return response()->json(["exito" => 'Producto agregado al carrito ']);
-            //return back();
-            //return view('carrito',compact('productoSeleccionado'));
-
         }else{
 
             $nuevoProductoSeleccionado= new App\Compra;
             $nuevoProductoSeleccionado->cantidad_productos = $request->cantidad_productos;
             $nuevoProductoSeleccionado->id_producto = $request->id_producto;
             $nuevoProductoSeleccionado->numero_boleta = $boleta->numero_boleta;
-
             $nuevoProductoSeleccionado->save();
 
-            //$productoSeleccionado = $nuevoProductoSeleccionado;
-            //$compraCliente = Compra::all()->where("numero_boleta", $boleta->numero_boleta);
-            //return ($compraCliente);
             return response()->json(["exito" => 'Producto agregado al carrito ']);
-            //return back();
-            //return view('carrito',compact('compraCliente'));
         }
              
     }

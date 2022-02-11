@@ -14,13 +14,26 @@ $(function() {
             $.ajax({
                 type: "POST",
                 url: "../agregarAlCarrito",
-                data: {cantidad_productos: $('#cantidadProducto').val(),id_producto: $('#id_producto').val()},
+                data: {cantidad_productos: $('#cantidadProducto').val(),id_producto: $('#id_producto').val(),stock_producto: $('#stock_producto').val()},
                 // dataType: "json",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(data) {
                     console.log(data);
+
+                    if(data.error){
+                        Swal.fire({
+                            title: 'Error',
+                            icon: 'error',
+
+                            text: data.error,
+    
+                        }).then(function(result) {
+                            location.reload();
+                        });
+
+                    }
     
                     if(data.exito){
                         Swal.fire({
