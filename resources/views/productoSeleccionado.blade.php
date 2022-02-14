@@ -1,24 +1,15 @@
 @extends('plantilla')
-
-{{-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script> --}}
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-
-
 <link rel="stylesheet" href="{{asset('css/productoSeleccionado.css') }}">
 <script type="text/javascript" src="{{asset('js/productoSeleccionado.js') }}"> </script>
 @section('seccion')
 	
-	<div class="carrito"> 
-		@if(Auth::check())
-			<a  onclick="carrito()" id="carrito" type="button" class=" carrito btn btn-dark">Carrito({{count($compraCliente)}})</a>
-		{{-- @else
-			<a  href="{{URL('/registrar')}}" type="button" class="carrito btn btn-dark">Carrito</a> --}}
-		@endif
-	</div>
-	
-	<h1 class="encabezado">PRODUCTO: {{$producto->nombre_producto}}</h1>
-	
+
+<section class="showcase" >
+	<header>
+		</h1><a> PRODUCTO: {{$producto->nombre_producto}}</a>  
+		<div class="toggle"></div>
+	</header>
 	<div class="row justify-content-center">
 		<div class="col-4">
 			<img class="imagen" src="{{ asset('imagenes/'.$producto->imagen) }}"><br>
@@ -52,6 +43,33 @@
 			<img class="tallas" src="{{asset('img/tallasPolera.jpg') }}" alt="">
 		</div>
 	</div>
+</section>
+
+	<div class="menu">
+		<ul>
+			
+			@if(Auth::check())
+				@if(Auth::user()->id_tipo_usuario == 1)
+				<li><a  onclick="carrito()" id="carrito" type="button" class= "carrito" >Carrito({{count($compraCliente)}})</a></li>
+				@endif
+				@if(Auth::user()->id_tipo_usuario == 2)
+					<li><a  onclick="carrito()" id="carrito" type="button" class= "carrito" >Carrito({{count($compraCliente)}})</a></li>
+				@endif
+			@endif
+			<li><a  href="{{URL('')}}" type="button" class= "home">Home</a></li>
+		</ul>
+	</div>
+	
+	
+	
+	<script>
+		const menuToggle =document.querySelector('.toggle')
+		const showcase =document.querySelector('.showcase')  
+		menuToggle.addEventListener('click', () => {
+			menuToggle.classList.toggle('active');
+			showcase.classList.toggle('active');
+		})
+	</script>
 
 
 @endsection

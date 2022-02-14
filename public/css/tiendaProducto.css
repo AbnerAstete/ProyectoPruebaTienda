@@ -1,28 +1,32 @@
-body {
-    padding-top: 40px;
-  }
-  .encabezado{
-    text-align: center;
-  }
-  .show-cart li {
-    display: flex;
-    
-  }
-  .card {
-    
-    margin-bottom: 30px;
-    text-align: center;
-    
-  }
-  .card-img-top {
-    height: 350px;
-    align-self: center;
-    
-  }
-  .card-block{
-    padding-top: 50px;
-  }
-  
-  .carrito{
-    float: right;
+.show-cart li {
+  display: flex;
 }
+.card { 
+  margin-top: 30px;
+  margin-bottom: 30px;
+  text-align: center;
+  color:black;
+}
+
+.card-img-top {
+  height: 350px;
+  align-self: center;
+}
+
+.card-block{
+  padding-top: 50px;
+}
+
+
+.showcase header{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 40px 100px;
+  z-index:1000;
+  display: flex;
+  align-items: center;
+  font-size: 30;
+}
+
