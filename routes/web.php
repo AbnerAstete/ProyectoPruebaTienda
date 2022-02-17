@@ -45,6 +45,10 @@ Route::delete('eliminarUsuarios/{id}','PagesController@eliminarUsuarios');
 Route::get('vistaProducto','PagesController@producto');
 Route::post('agregarProducto','PagesController@agregarProducto');
 Route::get('mostrarProducto','PagesController@mostrarProducto');
+Route::get('productosDisponibles','PagesController@productosDisponibles')->name("productosDisponibles");
+Route::get('productosNoDisponibles','PagesController@productosNoDisponibles')->name("productosNoDisponibles");
+Route::get('productosEliminados','PagesController@productosEliminados')->name("productosEliminados");
+
 Route::get('editarProducto/{id_categoria_producto}','PagesController@editarProducto');
 Route::post('updateProductos','PagesController@updateProductos');
 Route::get('eliminarProducto/{id_producto}','PagesController@eliminarProducto');
@@ -52,7 +56,10 @@ Route::get('habilitarProducto/{id_producto}','PagesController@habilitarProducto'
 Route::get('deshabilitarProducto/{id_producto}','PagesController@deshabilitarProducto');
 
 //Pruebas
-Route::get('/pruebas','PagesController@pruebas');
+Route::get('pruebas','PagesController@pruebas');
+// Route::get('pruebas',['uses'=>'PagesController@pruebas','as'=>'pruebas.pruebas']);
+Route::get('pruebas2','PagesController@pruebas2');
+
 //----- Crud Categorias
 
 Route::get('mostrarCategorias','PagesController@mostrarCategorias');
@@ -75,3 +82,7 @@ Route::post('agregarAlCarrito','PagesController@agregarAlCarrito');
 Route::get('ingresoRequerido','PagesController@ingresoRequerido');
 Route::delete('eliminarProductoEnCarrito/{id_compra}','PagesController@eliminarProductoEnCarrito');
 Route::post('cerrarBoleta/{numero_boleta}','PagesController@cerrarBoleta');
+
+//----- Productos segun hashtag
+
+Route::get('mostrarproductosporcategoria/{id_categoria}','PagesController@mostrarproductosporcategoria');
