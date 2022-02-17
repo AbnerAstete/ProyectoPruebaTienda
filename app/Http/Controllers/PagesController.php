@@ -9,11 +9,13 @@ use App\Http\Requests\ValidacionIngresar;
 use App\Http\Requests\ValidacionProducto;
 use App\Persona;
 use App\Compra;
+use App\Producto;
 use App\Boleta;
 use Auth;
 use Log;
 use Session;
 use DB;
+use Exception;
 use App\Categoria;
 use Carbon\Carbon;
 use Illuminate\Pagination\Paginator;
@@ -481,7 +483,6 @@ class PagesController extends Controller
         $productoEliminar->tipo_modificacion='Eliminado';
         $productoEliminar->visible=false;
         $productoEliminar->disponibilidad_producto=false;
-
         $productoEliminar->save();
         return response()->json(["exito" => 'Producto Eliminado']);
         }
@@ -688,13 +689,16 @@ class PagesController extends Controller
             
             if(!$boleta ){
                 $compraCliente=[];
+                //return response()->json(["exito" => 'Producto agregado al carrito ']);
                 return view('productoSeleccionado',compact('producto','compraCliente'));
                 
             }else{
                 $compraCliente = Compra::where("numero_boleta", $boleta->numero_boleta)->get();
+                //return response()->json(["exito" => 'Producto agregado al carrito ']);
                 return view('productoSeleccionado',compact('producto','compraCliente'));
             }
         }else{
+            
             return view('productoSeleccionado',compact('producto'));
         }
     }
@@ -705,7 +709,8 @@ class PagesController extends Controller
         ->first();
         
         if(!$boleta ){
-            return 'Carrito Vacio';
+            return response()->json(["error" => 'Carrito Vacio']);
+            //return 'Carrito Vacio';
             
         }else{
             $valorTotal= 0;
@@ -715,21 +720,32 @@ class PagesController extends Controller
                 ->select('p.imagen','p.nombre_producto','p.talla_producto','c.id_compra','p.precio_producto','c.cantidad_productos')
                 ->get();
 
-            $numeroVoleta=$boleta->numero_boleta;
-            return view('carrito',compact('compraCliente','valorTotal','numeroVoleta'));
+            $numeroBoleta=$boleta->numero_boleta;
+            return view('carrito',compact('compraCliente','valorTotal','numeroBoleta'));
         }
 
     }
     
     public function agregarAlCarrito(Request $request){
+        
 
+        Log::info($request);
         $boleta = Boleta::where("id_persona", Auth::user()->id)
         ->where("visible", true)
         ->first();
+        
+        $cantidad_seleccionada = $request->cantidad_productos;
+        $stock_producto = $request->stock_producto;
+        Log::info($cantidad_seleccionada);
+        Log::info($stock_producto);
+
+        if ($cantidad_seleccionada <= 0 or $cantidad_seleccionada > $stock_producto ){
+            return response()->json(['error'=>'Ingrese una cantidad de productos valida.']);
+        }
+
 
         if(!$boleta){
             
-
             $nuevaBoleta= new App\Boleta;         
             $nuevaBoleta->id_persona = Auth::user()->id;
             $nuevaBoleta->visible = true;
@@ -739,29 +755,18 @@ class PagesController extends Controller
             $nuevoProductoSeleccionado->cantidad_productos = $request->cantidad_productos;
             $nuevoProductoSeleccionado->id_producto = $request->id_producto;
             $nuevoProductoSeleccionado->numero_boleta = $nuevaBoleta->numero_boleta;
-
             $nuevoProductoSeleccionado->save();
 
-            //$productoSeleccionado = $nuevoProductoSeleccionado;
-            
-            //return ($compraCliente);
-            return back();
-            //return view('carrito',compact('productoSeleccionado'));
-
+            return response()->json(["exito" => 'Producto agregado al carrito ']);
         }else{
 
             $nuevoProductoSeleccionado= new App\Compra;
             $nuevoProductoSeleccionado->cantidad_productos = $request->cantidad_productos;
             $nuevoProductoSeleccionado->id_producto = $request->id_producto;
             $nuevoProductoSeleccionado->numero_boleta = $boleta->numero_boleta;
-
             $nuevoProductoSeleccionado->save();
 
-            //$productoSeleccionado = $nuevoProductoSeleccionado;
-            //$compraCliente = Compra::all()->where("numero_boleta", $boleta->numero_boleta);
-            //return ($compraCliente);
-            return back();
-            //return view('carrito',compact('compraCliente'));
+            return response()->json(["exito" => 'Producto agregado al carrito ']);
         }
              
     }
@@ -769,21 +774,55 @@ class PagesController extends Controller
     public function eliminarProductoEnCarrito($id_compra){
         $productoEliminar = App\Compra::findOrFail($id_compra);
         $productoEliminar -> delete();
-        return back();
+        return response()->json(["exito" => 'Producto eliminado del carrito ']);
+        // return back();
     }
 
     public function cerrarBoleta($numero_boleta){
     
         $cerrarBoleta = App\Boleta::findOrFail($numero_boleta);
-        $cerrarBoleta->visible = false;
-        $cerrarBoleta->save();
 
-        $productos= App\Producto::all();
-        $compraCliente=[];
-        return view('tiendaProducto',compact('productos','compraCliente'));
-        //return view('home');
-    }
+        //$productos= App\Producto::all();
+        
+        //$compraCliente=[];
+        $compraCliente = Compra::where("numero_boleta","=", $cerrarBoleta->numero_boleta)->get();
+        Log::info($compraCliente->toArray());
+        
+        if(count($compraCliente) <= 0){
+            return response()->json(["error" => 'No tiene productos en carrito']);    
+        }else{
+
+            
+            DB::beginTransaction();
+            foreach ($compraCliente as $compra) {
+                $productoSeleccionado= Producto::where("productos.id_producto","=", $compra->id_producto)->first();
+                Log::info($productoSeleccionado);
+                 $productoSeleccionado->stock_producto = $productoSeleccionado->stock_producto - ($compra->cantidad_productos);
+            
+                if($productoSeleccionado->stock_producto >= 0){
+            
+                    $productoSeleccionado->save();
+                    $cerrarBoleta->visible = false;
+                    $cerrarBoleta->save();
+                        
+                }else{
+                    DB::rollBack();
+                    return response()->json(["errorCantidad" => 'La compra realizada excede el stock']);              
+                }     
+            }
+            DB::commit();
+            return response()->json(["exito" => 'Compra Realizada']);
+            
+               
+
+        
+
+        }
     
+        
+
+    }
+
     // }
 
 
