@@ -1,4 +1,4 @@
-$(function() {
+$(function () {
     $('#editar-submit').click(function(e){
         e.preventDefault();
 
@@ -115,6 +115,7 @@ $(function() {
 //const formulario = document.getElementById('formulario_producto');
         var form_data = new FormData(document.getElementById("formulario_producto"));
         //var idproductox = document.getElementById('id_productox').value;
+
        // console.log(idproductox);
         $.ajax({ 
             type: "POST",

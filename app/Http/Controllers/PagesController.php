@@ -19,7 +19,8 @@ use Exception;
 use App\Categoria;
 use Carbon\Carbon;
 use Illuminate\Pagination\Paginator;
-
+use App\categoria_producto ;
+Use App\Producto;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Supoort\Facades\BD;
@@ -241,25 +242,107 @@ class PagesController extends Controller
     }
 
     public static  function mostrarProducto(Request $request){
-
-        // $publishedArticles = Article::paginate(10, ['*'], 'published');
-        // $unpublishedArticles = Article::paginate(10, ['*'], 'unpublished');
-       
-        $productosDisponibles= App\Producto::where("visible",true)
-        ->where("disponibilidad_producto",True)
-        ->where("stock_producto",">=",0)->paginate(2, ['*'], 'productosDisponibles');
-        // $productosDisponibles->setPageName('productosDisponibles');
-
-        $productosnoDisponibles= App\Producto::where("visible",true)
-        ->where("disponibilidad_producto",false)
-       ->paginate(2, ['*'], 'productosnoDisponibles');
-        // $productosnoDisponibles->setPageName('productosnoDisponibles');
-
-        $productosEliminados= App\Producto::where("visible",false)->paginate(4, ['*'], 'productosEliminados');
-        // $productosEliminados->setPageName('productosEliminados');
-
-        return view('mostrarProductos')->with(['productosDisponibles'=>$productosDisponibles,'productosnoDisponibles'=>$productosnoDisponibles,'productosEliminados'=>$productosEliminados]);
+        return view('mostrarProductos');
     }
+
+    public function productosDisponibles(){
+        if(request()->ajax())
+        {
+            return datatables()->of(App\Producto::select("id_producto","nombre_producto","talla_producto","precio_producto","stock_producto","descripcion","imagen","fecha_creacion","fecha_modificacion")
+            ->where("visible",true)
+            ->where("disponibilidad_producto",true)->get())
+
+            ->addColumn('categoria',function($categoria){
+                Log::info($categoria);
+                Log::info($categoria->categorias);
+                $arreglocat = '';
+                foreach ($categoria->categorias as $key => $value) {
+                    $arreglocat .= '<a class="btn btn-primary" href="mostrarproductosporcategoria/'.$value->id_categoria.'" role="button">#'.$value->nombre_categoria.'</a>';
+                }
+                return $arreglocat;
+            })
+            ->addColumn('action', function($data){
+
+                $button= '<a href=" http://localhost/tienda/public/editarProducto/'.$data->id_producto.'" class="btn btn-warning">Editar</a> ';
+                $button .= '&nbsp;&nbsp;';
+                $button .= '<button type="button" name="deshabilitar"  onclick=" deshabilitarProducto ('.$data->id_producto.')  " id="'.$data->id_producto.'"class="btn btn-primary">Deshabilitar</button>';
+                $button .= '&nbsp;&nbsp;';
+                $button .= '<button type="button" name="delete"  onclick=" eliminarProducto ('.$data->id_producto.')  " id="'.$data->id_producto.'" class="btn btn-danger">Eliminar</button>';
+                
+                return $button;
+            })
+            ->rawColumns(['action','categoria'])
+            ->make(true);
+        return view('productosDisponibles');
+
+
+        }
+    }   
+            
+    
+    public function productosNoDisponibles(){
+
+        // $categoria = Categoria::all();
+        // $producto = Producto::all();
+        if(request()->ajax())
+     
+        {
+
+            return datatables()->of(App\Producto::select("productos.id_producto","productos.nombre_producto","productos.talla_producto","productos.precio_producto","productos.stock_producto","productos.descripcion","productos.imagen","productos.fecha_creacion"/*"categorias.nombre_categoria"*/)
+            // ->join("categoria_producto as cp","cp.id_producto","=","productos.id_producto")
+            // ->join("categorias","categorias.id_categoria","=","cp.id_producto")
+            ->where("visible",true)
+             ->where("disponibilidad_producto",false)->get())
+             
+             ->addColumn('categoria',function($categoria){
+                Log::info($categoria);
+                Log::info($categoria->categorias);
+                $arreglocat = '';
+                foreach ($categoria->categorias as $key => $value) {
+                    // $arreglocat .= '<span class="badge badge-primary"># '.$value->nombre_categoria.' </span><br>';
+                    $arreglocat .= '<a class="btn btn-primary" href="mostrarproductosporcategoria/'.$value->id_categoria.'" role="button">#'.$value->nombre_categoria.'</a>';
+                    //<a href="{{URL('editarCategoria',$item->id_categoria)}}" class="btn btn-warning btn-sm">Editar</a>
+
+                    
+                }
+                return $arreglocat;
+            })
+
+            ->addColumn('action', function($data){
+                Log::info($data);
+                // ('.$data->id_producto.')"<a href="https://zentica-global.com/#"
+
+                $button= '<a href=" http://localhost/tienda/public/editarProducto/'.$data->id_producto.'"class="btn btn-warning">Editar</a> ';
+                
+                // $button = '<button type="button" onclick= "location.href= editarProducto ('.$data->id_producto.') " name="edit" id="'.$data->id_producto.'" class="edit btn btn-primary btn-sm">Edit</button>';
+                $button .= '&nbsp;&nbsp;';
+                // $button .= '<button type="button" name="habilitar"  onclick= "location.href= habilitarProducto "   id="'.$data->id_producto.'" class="edit btn btn-primary btn-sm">Habilitar</button>';
+                // $button .= '<a href=" http://localhost/tienda/public/habilitarProducto/'.$data->id_producto.'" class="btn btn-xs btn-secondary">Habilitar</a> ';
+                $button .= '<button type="button" name="habilitar"  onclick=" habilitarProducto ('.$data->id_producto.')  " id="'.$data->id_producto.'" class="btn btn-primary">Habilitar</button>';
+
+                $button .= '&nbsp;&nbsp;';
+                $button .= '<button type="button" name="delete"  onclick=" eliminarProducto ('.$data->id_producto.')  " id="'.$data->id_producto.'" class="btn btn-danger"">Eliminar</button>';
+            
+                return $button;
+
+              
+            })
+
+            ->rawColumns(['action','categoria'])
+            ->make(true);
+        // return response()->json(["aaData" => $productosnoDisponibles->toArray()]);
+        return view('productosNoDisponibles'/*,compact('producto','categoria')*/);
+
+
+        }
+    }   
+    public function productosEliminados(Request $request){
+        $productosEliminados= App\Producto::select("nombre_producto","talla_producto","precio_producto","stock_producto","descripcion","imagen")->where("visible",false)->get();
+        return response()->json(["aaData" => $productosEliminados->toArray()]);
+
+    }
+
+
 
     public function editarProducto($id_producto){
         $producto = App\Producto::findOrFail($id_producto);
@@ -408,26 +491,44 @@ class PagesController extends Controller
         }
     }
     public function habilitarProducto($id_producto){
-        $habilitarProducto = App\Producto::findOrFail($id_producto);
+
+        $habilitarProducto = App\Producto::find($id_producto);
         //$productoEliminar -> delete();
+        if($habilitarProducto){
         $habilitarProducto -> disponibilidad_producto =True;  
         $habilitarProducto->fecha_modificacion=Carbon::now()->format('Y-m-d H:i:s');
         $habilitarProducto->tipo_modificacion=null;
         $habilitarProducto->visible=True;
 
         $habilitarProducto->save();
-        return back()->with('mensaje','Producto habilitado');
+        return response()->json(["exito" => 'Producto habilitado']);
+        }
+        else{
+        return response()->json(['error'=>'Error al habilitar producto']);
+        }
+
+
     }
     public function deshabilitarProducto($id_producto){
+
         $deshabilitarProducto = App\Producto::findOrFail($id_producto);
+        if($deshabilitarProducto){
         $deshabilitarProducto -> disponibilidad_producto =False;  
         $deshabilitarProducto->fecha_modificacion=Carbon::now()->format('Y-m-d H:i:s');
         $deshabilitarProducto->tipo_modificacion=null;
         $deshabilitarProducto->visible=True;
 
         $deshabilitarProducto->save();
-        return back()->with('mensaje','Producto deshabilitado');
+        return response()->json(["exito" => 'Producto deshabilitado']);
+        }
+        else{
+            return response()->json(['error'=>'Error al deshabilitar producto']);
+
+        }
+
+
     }
+
     public function mostrarCategorias(Request $request){
         $categorias= App\Categoria::all();
         return view('mostrarCategorias',compact('categorias'));
@@ -528,9 +629,30 @@ class PagesController extends Controller
         $categoriaEliminar->save();
         return back()->with('mensaje','Producto Eliminado');
     }
-    public function pruebas(){
-        
-        return view('pruebas');
+  
+    public function pruebas(Request $request)
+    {
+        // $productosDisponibles = App\Producto::all();
+
+        // if ($request->ajax()) {
+        //     $data = Producto::latest()->get();
+        //     return Datatables::of($data)
+        //             ->addIndexColumn()
+        //             ->addColumn('action', function($row){
+   
+        //                    $btn = '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">View</a>';
+     
+        //                     return $btn;
+        //             })
+        //             ->rawColumns(['action'])
+        //             ->make(true);
+        // }
+      
+        return view('pruebas'); //,compact('productosDisponibles')
+    }
+   
+    public function pruebas2(){
+        return view('pruebas2');
     }
 
     public function tiendaProducto(Request $request){
@@ -702,4 +824,37 @@ class PagesController extends Controller
     }
 
     // }
+
+
+    public function mostrarproductosporcategoria($id_categoria){
+
+
+        $categoria_producto = categoria_producto::where('id_categoria',$id_categoria)->where('visible',True)->get();
+        $categoria = Categoria::find($id_categoria);
+        Log::info($categoria_producto->toArray());
+
+        $infoprod = [];
+
+        foreach ($categoria_producto as $key => $value) {
+
+            $productos = Producto::find($value->id_producto);
+            $infoprod[] =$productos;
+            Log::info($productos);
+        }
+        Log::info($infoprod);
+
+        // $categoria = App\Categoria::findOrFail($id_categoria);
+        // $categorias= App\Categoria::all();
+        // foreach ($categorias as $key => $value) {
+        //     Log::info($value->productos);
+        // }
+         
+        // Log::info($categoria);
+        // $productos = $categoria->productos;
+        
+        // Log::info($productos);
+        
+        return view('mostrarproductosporcategoria',compact('infoprod'));
+    }
+ 
 }
