@@ -11,6 +11,11 @@
 */
 
 
+Route::get('pdf/{boletaPDF}','PagesController@crearBoleta');
+    
+   
+
+
 //Usuario sin Ingresar
 Route::get('/', 'PagesController@home'); 
 
@@ -75,3 +80,9 @@ Route::post('agregarAlCarrito','PagesController@agregarAlCarrito');
 Route::get('ingresoRequerido','PagesController@ingresoRequerido');
 Route::post('eliminarProductoEnCarrito/{id_compra}','PagesController@eliminarProductoEnCarrito');
 Route::post('cerrarBoleta/{numero_boleta}','PagesController@cerrarBoleta');
+
+
+
+
+
+
