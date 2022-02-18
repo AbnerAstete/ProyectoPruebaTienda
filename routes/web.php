@@ -11,6 +11,11 @@
 */
 
 
+Route::get('pdf/{boletaPDF}','PagesController@crearBoleta');
+    
+   
+
+
 //Usuario sin Ingresar
 Route::get('/', 'PagesController@home'); 
 

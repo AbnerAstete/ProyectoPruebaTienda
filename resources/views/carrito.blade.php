@@ -34,8 +34,8 @@
                 <td>{{$item->nombre_producto}}</td>
                 <td>{{$item->talla_producto}}</td>
                 <td>{{$item->cantidad_productos}}</td>
-                <td>{{$item->precio_producto}}</td>
-                <td>{{$item->precio_producto * $item->cantidad_productos}}</td>
+                <td> $ {{$item->precio_producto}}</td>
+                <td> $ {{$item->precio_producto * $item->cantidad_productos}}</td>
                 <td>  
                   <a  onclick="eliminar({{$item->id_compra}})" id="eliminar" type="button" class=" btn btn-danger btn-sm">Eliminar Producto</a>
                 </td>

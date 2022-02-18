@@ -15,12 +15,12 @@ use Auth;
 use Log;
 use Session;
 use DB;
+use PDF;
 use Exception;
 use App\Categoria;
 use Carbon\Carbon;
 use Illuminate\Pagination\Paginator;
 use App\categoria_producto ;
-Use App\Producto;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Supoort\Facades\BD;
@@ -796,7 +796,7 @@ class PagesController extends Controller
             DB::beginTransaction();
             foreach ($compraCliente as $compra) {
                 $productoSeleccionado= Producto::where("productos.id_producto","=", $compra->id_producto)->first();
-                Log::info($productoSeleccionado);
+                Log::info($productoSeleccionado->toArray());
                  $productoSeleccionado->stock_producto = $productoSeleccionado->stock_producto - ($compra->cantidad_productos);
             
                 if($productoSeleccionado->stock_producto >= 0){
@@ -811,18 +811,39 @@ class PagesController extends Controller
                 }     
             }
             DB::commit();
-            return response()->json(["exito" => 'Compra Realizada']);
-            
-               
-
-        
-
+            return response()->json(["exito" => 'Compra Realizada', 'boletaPDF'=> $numero_boleta]);
         }
-    
-        
-
     }
 
+    public function crearBoleta($boletaPDF){
+
+        $boleta = App\Boleta::findOrFail($boletaPDF);
+
+        $usuario= Auth::user();
+
+        $compras = Compra::where("numero_boleta","=", $boleta->numero_boleta)
+        ->join('productos as p','p.id_producto',"=", "compras.id_producto")
+        ->select('p.nombre_producto','p.precio_producto','p.descripcion','compras.cantidad_productos')
+        ->get();
+
+        //dd($usuario);
+        $valorTotal=0;
+        $iva=0;
+
+        $hoy = Carbon::now();
+
+        $pdf = PDF::loadView("pdf.boleta", [
+            "fecha" => $hoy->format("d/m/Y"),
+            "boleta" => $boleta,
+            "usuario" => $usuario,
+            "compras" => $compras,
+            "valorTotal" => $valorTotal,
+            "iva" => $iva,
+        ]);
+        return $pdf->setPaper('legal', 'portrait')->stream('Boleta#'.$boletaPDF.'.pdf');
+        //return $pdf;
+
+    }
     // }
 
 

@@ -64,7 +64,11 @@ $(function() {
                                         text: data.exito,
                 
                                     }).then(function(result) {
-                                        window.location.href = "productos";
+                                        
+                                        const boletaPDF = data.boletaPDF;
+                                        imprimirPDF(boletaPDF);                                        
+                                        window.location.replace("productos");
+                                        
                                     });
                                 }        
                             },
@@ -76,7 +80,47 @@ $(function() {
                 })
         })
     });
+
 });
+function imprimirPDF(boletaPDF){
+    //window.location.href = "productos"; 
+    //  window.location.href = "pdf"+"/"+boletaPDF; 
+    const ruta = "http://localhost/tienda/public/pdf"+"/"+boletaPDF;
+    console.log(ruta);
+    window.open(ruta,"_blank");
+    }
+
+
+// function imprimirPDF(boletaPDF){
+//     $.ajax({
+//         type: "GET",
+//         url: "pdf/"+boletaPDF,
+//         headers: {
+//             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//         },
+//         success: function(data) {
+//             console.log(data);
+
+//             if(data.exito){
+//                 Swal.fire({
+//                     title: 'Exito',
+//                     icon: 'success',
+
+//                     text: data.exito,
+
+//                 }).then(function(result) {
+//                     window.location.href ="productos";
+//                 });
+//             }
+//         },
+//         error: function(error){
+//             console.log(error);
+//         }
+//     });
+
+
+// }
+
 
 
 function eliminar(id_compra){
